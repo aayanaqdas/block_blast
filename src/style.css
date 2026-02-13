@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    background-color: #000;
+}
+
+canvas {
+    background: linear-gradient(180deg, #3b5998 0%, #345391 50%, #4a6bb1 100%);
+}
