@@ -3,7 +3,7 @@ import { drawGrid } from "./grid.js";
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-const GAME_WIDTH = 600;
+const GAME_WIDTH = 550;
 const GAME_HEIGHT = 900;
 
 function initCanvas() {

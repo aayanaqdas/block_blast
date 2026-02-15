@@ -1,12 +1,20 @@
 body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    background-color: #000;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  background-color: #000;
 }
 
 canvas {
-    background: linear-gradient(180deg, #3b5998 0%, #345391 50%, #4a6bb1 100%);
+  background: linear-gradient(
+    180deg,
+    #4357ad 0%,
+    #465bb0 20%,
+    #4c65b7 40%,
+    #506aba 60%,
+    #536ebd 80%,
+    #5672c0 100%
+  );
 }
