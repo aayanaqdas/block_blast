@@ -1,4 +1,66 @@
-function drawBlock(ctx, x, y, innerSize, RADIUS, blockColor) {
+const SHAPES = {
+  DOT: [[1]],
+  SQUARE_2: [
+    [1, 1],
+    [1, 1],
+  ],
+
+  SQUARE_3: [
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+  ],
+
+  LINE_2: [[1, 1]],
+  LINE_3: [[1, 1, 1]],
+  LINE_4: [[1, 1, 1, 1]],
+  LINE_5: [[1, 1, 1, 1, 1]],
+
+  L_SMALL: [
+    [1, 0],
+    [1, 1],
+  ],
+  L_STANDARD: [
+    [1, 0],
+    [1, 0],
+    [1, 1],
+  ],
+  L_BIG: [
+    [1, 0, 0],
+    [1, 0, 0],
+    [1, 1, 1],
+  ],
+
+  T_SHAPE: [
+    [1, 1, 1],
+    [0, 1, 0],
+  ],
+  CORNER_2: [
+    [1, 1],
+    [1, 0],
+  ],
+  CORNER_3: [
+    [1, 1, 1],
+    [1, 0, 0],
+    [1, 0, 0],
+  ],
+
+  Z_SHAPE: [
+    [1, 1, 0],
+    [0, 1, 1],
+  ],
+  S_SHAPE: [
+    [0, 1, 1],
+    [1, 1, 0],
+  ],
+
+  RECT: [
+    [1, 1, 1],
+    [1, 1, 1],
+  ],
+};
+
+function drawBlock(ctx, x, y, innerSize, RADIUS, PADDING, blockColor) {
   const bevelSize = 8;
 
   ctx.fillStyle = blockColor;
@@ -55,6 +117,12 @@ function drawBlock(ctx, x, y, innerSize, RADIUS, blockColor) {
   ctx.lineTo(x + bevelSize, y + innerSize - bevelSize);
   ctx.closePath();
   ctx.fill();
+
+  ctx.strokeStyle = "#242c54";
+  ctx.beginPath();
+  ctx.roundRect(x - PADDING, y - PADDING, innerSize + PADDING * 2, innerSize + PADDING * 2, RADIUS);
+
+  ctx.stroke();
 }
 
 function adjustColor(color, percent) {
@@ -74,4 +142,4 @@ function adjustColor(color, percent) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-export { drawBlock };
+export { drawBlock, SHAPES };

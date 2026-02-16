@@ -1,4 +1,4 @@
-import { drawBlock } from "./blocks.js";
+import { drawBlock, SHAPES } from "./blocks.js";
 
 const GRID_SIZE = 8;
 const CELL_SIZE = 55;
@@ -17,13 +17,6 @@ const BLOCK_COLORS = {
   GREEN: "#2ee62e",
 };
 
-gridData[0][0] = "CYAN";
-gridData[1][0] = "BLUE";
-gridData[2][0] = "GREEN";
-gridData[3][0] = "ORANGE";
-gridData[4][0] = "PURPLE";
-gridData[5][0] = "RED";
-gridData[6][0] = "YELLOW";
 
 function drawGrid(ctx, GAME_WIDTH, GAME_HEIGHT) {
   const gridWidth = GRID_SIZE * CELL_SIZE;
@@ -47,15 +40,55 @@ function drawGrid(ctx, GAME_WIDTH, GAME_HEIGHT) {
       const x = xOffSet + column * CELL_SIZE;
       const y = yOffSet + row * CELL_SIZE;
       const innerSize = CELL_SIZE - PADDING * 2;
+      const colorKey = gridData[row][column];
 
       ctx.fillStyle = "#242c54";
       ctx.beginPath();
       ctx.roundRect(x + PADDING, y + PADDING, innerSize, innerSize, RADIUS);
       ctx.fill();
 
-      const blockColorKey = gridData[row][column];
-      if (blockColorKey) {
-        drawBlock(ctx, x + PADDING, y + PADDING, innerSize, RADIUS, BLOCK_COLORS[blockColorKey]);
+      if (colorKey !== null) {
+        drawBlock(
+          ctx,
+          x + PADDING,
+          y + PADDING,
+          innerSize,
+          RADIUS,
+          PADDING,
+          BLOCK_COLORS[colorKey],
+        );
+      }
+
+      
+    }
+  }
+}
+
+
+placeOnGrid(SHAPES.L_STANDARD, 1, 2, "GREEN")
+placeOnGrid(SHAPES.SQUARE_2, 0, 0, "YELLOW");
+placeOnGrid(SHAPES.T_SHAPE, 0, 2, "RED");
+placeOnGrid(SHAPES.SQUARE_3, 0, 5, "PURPLE");
+placeOnGrid(SHAPES.DOT, 7, 7, "BLUE");
+placeOnGrid(SHAPES.S_SHAPE, 6, 0, "GREEN")
+placeOnGrid(SHAPES.Z_SHAPE, 5, 2, "YELLOW")
+placeOnGrid(SHAPES.CORNER_2, 5, 0, "BLUE")
+placeOnGrid(SHAPES.LINE_5, 7, 2, "CYAN");
+placeOnGrid(SHAPES.LINE_4, 4, 0, "PURPLE");
+placeOnGrid(SHAPES.LINE_3, 6, 5, "PURPLE");
+placeOnGrid(SHAPES.L_BIG, 1, 4, "ORANGE");
+placeOnGrid(SHAPES.L_SMALL, 2, 0, "CYAN");
+placeOnGrid(SHAPES.RECT, 4, 4, "RED")
+
+function placeOnGrid(shape, startRow, startCol, color) {
+  for (let shapeRow = 0; shapeRow < shape.length; shapeRow++) {
+    for (let shapeCol = 0; shapeCol < shape[shapeRow].length; shapeCol++) {
+      if (shape[shapeRow][shapeCol] === 1) {
+        const gridRow = startRow + shapeRow;
+        const gridCol = startCol + shapeCol;
+
+        gridData[gridRow][gridCol] = color;
+        console.log(gridData)
       }
     }
   }
