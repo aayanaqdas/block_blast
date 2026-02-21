@@ -1,3 +1,4 @@
+import { gameState } from "./gameStates.js";
 import { drawBlock, SHAPES } from "./blocks.js";
 
 const GRID_SIZE = 8;
@@ -5,20 +6,12 @@ const CELL_SIZE = 55;
 const PADDING = 1;
 const RADIUS = 3;
 
-const gridData = Array.from({ length: 8 }, () => Array(8).fill(null));
-
-const BLOCK_COLORS = {
-  CYAN: "#2ee6e6",
-  BLUE: "#1a56b8",
-  PURPLE: "#9e2ee6",
-  ORANGE: "#ff9800",
-  RED: "#e62e2e",
-  YELLOW: "#e6d12e",
-  GREEN: "#2ee62e",
-};
+const GAME_WIDTH = gameState.GAME_WIDTH;
+const GAME_HEIGHT = gameState.GAME_HEIGHT;
+const gridData = gameState.gridData;
 
 
-function drawGrid(ctx, GAME_WIDTH, GAME_HEIGHT) {
+function drawGrid(ctx) {
   const gridWidth = GRID_SIZE * CELL_SIZE;
 
   const xOffSet = (GAME_WIDTH - gridWidth) / 2;
@@ -55,30 +48,12 @@ function drawGrid(ctx, GAME_WIDTH, GAME_HEIGHT) {
           innerSize,
           RADIUS,
           PADDING,
-          BLOCK_COLORS[colorKey],
+          colorKey,
         );
       }
-
-      
     }
   }
 }
-
-
-placeOnGrid(SHAPES.L_STANDARD, 1, 2, "GREEN")
-placeOnGrid(SHAPES.SQUARE_2, 0, 0, "YELLOW");
-placeOnGrid(SHAPES.T_SHAPE, 0, 2, "RED");
-placeOnGrid(SHAPES.SQUARE_3, 0, 5, "PURPLE");
-placeOnGrid(SHAPES.DOT, 7, 7, "BLUE");
-placeOnGrid(SHAPES.S_SHAPE, 6, 0, "GREEN")
-placeOnGrid(SHAPES.Z_SHAPE, 5, 2, "YELLOW")
-placeOnGrid(SHAPES.CORNER_2, 5, 0, "BLUE")
-placeOnGrid(SHAPES.LINE_5, 7, 2, "CYAN");
-placeOnGrid(SHAPES.LINE_4, 4, 0, "PURPLE");
-placeOnGrid(SHAPES.LINE_3, 6, 5, "PURPLE");
-placeOnGrid(SHAPES.L_BIG, 1, 4, "ORANGE");
-placeOnGrid(SHAPES.L_SMALL, 2, 0, "CYAN");
-placeOnGrid(SHAPES.RECT, 4, 4, "RED")
 
 function placeOnGrid(shape, startRow, startCol, color) {
   for (let shapeRow = 0; shapeRow < shape.length; shapeRow++) {
@@ -88,10 +63,27 @@ function placeOnGrid(shape, startRow, startCol, color) {
         const gridCol = startCol + shapeCol;
 
         gridData[gridRow][gridCol] = color;
-        console.log(gridData)
+        
       }
     }
   }
 }
+
+
+placeOnGrid(SHAPES.L_STANDARD, 1, 2, "GREEN");
+placeOnGrid(SHAPES.SQUARE_2, 0, 0, "YELLOW");
+placeOnGrid(SHAPES.T_SHAPE, 0, 2, "RED");
+placeOnGrid(SHAPES.SQUARE_3, 0, 5, "PURPLE");
+// placeOnGrid(SHAPES.DOT, 7, 7, "BLUE");
+// placeOnGrid(SHAPES.S_SHAPE, 6, 0, "GREEN");
+// placeOnGrid(SHAPES.Z_SHAPE, 5, 2, "YELLOW");
+// placeOnGrid(SHAPES.CORNER_2, 5, 0, "BLUE");
+// placeOnGrid(SHAPES.LINE_5, 7, 2, "CYAN");
+// placeOnGrid(SHAPES.LINE_4, 4, 0, "PURPLE");
+// placeOnGrid(SHAPES.LINE_3, 6, 5, "PURPLE");
+// placeOnGrid(SHAPES.L_BIG, 1, 4, "ORANGE");
+// placeOnGrid(SHAPES.L_SMALL, 2, 0, "CYAN");
+// placeOnGrid(SHAPES.RECT, 4, 4, "RED");
+
 
 export { drawGrid };

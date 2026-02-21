@@ -1,10 +1,14 @@
+import { gameState } from "./gameStates.js";
 import { drawGrid } from "./grid.js";
+import { createHand, drawHand } from "./blocks.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-const GAME_WIDTH = 550;
-const GAME_HEIGHT = 900;
+const GAME_WIDTH = gameState.GAME_WIDTH;
+const GAME_HEIGHT = gameState.GAME_HEIGHT;
+
+
 
 function initCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -22,15 +26,25 @@ function initCanvas() {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   ctx.scale(dpr * scale, dpr * scale);
+
 }
 
 function gameLoop() {
-  drawGrid(ctx, GAME_WIDTH, GAME_HEIGHT);
+  drawGrid(ctx);
+  drawHand(ctx);
   requestAnimationFrame(gameLoop);
 }
 
-initCanvas();
+function initGame(){
+  gameState.init(canvas, ctx);
+  initCanvas();
+  createHand()
+  window.addEventListener("resize", initCanvas);
+  gameLoop();
+}
 
-gameLoop();
+initGame();
 
-window.addEventListener("resize", initCanvas);
+
+
+
