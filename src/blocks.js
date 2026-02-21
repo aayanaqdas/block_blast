@@ -68,6 +68,12 @@ class DraggableShape {
       });
     });
   }
+
+  reset() {
+    this.x = this.spawnX;
+    this.y = this.spawnY;
+    this.scale = 0.5;
+  }
 }
 
 function createHand() {
@@ -81,12 +87,49 @@ function createHand() {
     const newShape = new DraggableShape(shape, color, i);
     gameState.hand.push(newShape);
   }
-
 }
 
 function drawHand(ctx) {
   gameState.hand.forEach((shape) => {
     shape.draw(ctx);
+  });
+}
+
+function initDragControls() {
+  gameState.canvas.addEventListener("pointerdown", (e) => {
+    const rect = gameState.canvas.getBoundingClientRect();
+    const clickX = ((e.clientX - rect.left) / rect.width) * GAME_WIDTH;
+    const clickY = ((e.clientY - rect.top) / rect.height) * GAME_HEIGHT;
+
+    gameState.hand.forEach((shape) => {
+      const shapeLeft = shape.x - shape.w / 2;
+      const shapeTop = shape.y - shape.h / 2;
+      if (isPointInRect(clickX, clickY, shapeLeft, shapeTop, shape.w, shape.h)) {
+        shape.isDragging = true;
+        shape.scale = 1;
+      }
+
+      console.log(shape, rect, e);
+    });
+  });
+
+  gameState.canvas.addEventListener("pointermove", (e) => {
+    const rect = gameState.canvas.getBoundingClientRect();
+    const clickX = ((e.clientX - rect.left) / rect.width) * GAME_WIDTH;
+    const clickY = ((e.clientY - rect.top) / rect.height) * GAME_HEIGHT;
+    gameState.hand.forEach((shape) => {
+      if (shape.isDragging) {
+        shape.x = clickX;
+        shape.y = clickY;
+      }
+    });
+  });
+
+  gameState.canvas.addEventListener("pointerup", () => {
+    gameState.hand.forEach((shape) => {
+      shape.isDragging = false;
+      shape.reset();
+    });
   });
 }
 
@@ -177,4 +220,9 @@ function adjustColor(color, percent) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-export { drawBlock, createHand, drawHand, SHAPES };
+function initHand() {
+  createHand();
+  initDragControls();
+}
+
+export { drawBlock, initHand, drawHand, SHAPES };

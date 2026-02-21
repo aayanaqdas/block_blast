@@ -17,4 +17,5 @@ canvas {
     #536ebd 80%,
     #5672c0 100%
   );
+  touch-action: none;
 }
