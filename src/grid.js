@@ -10,7 +10,6 @@ const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
 const gridData = gameState.gridData;
 
-
 function drawGrid(ctx) {
   const gridWidth = GRID_SIZE * CELL_SIZE;
 
@@ -41,15 +40,7 @@ function drawGrid(ctx) {
       ctx.fill();
 
       if (colorKey !== null) {
-        drawBlock(
-          ctx,
-          x + PADDING,
-          y + PADDING,
-          innerSize,
-          RADIUS,
-          PADDING,
-          colorKey,
-        );
+        drawBlock(ctx, x + PADDING, y + PADDING, innerSize, RADIUS, PADDING, colorKey);
       }
     }
   }
@@ -62,28 +53,27 @@ function placeOnGrid(shape, startRow, startCol, color) {
         const gridRow = startRow + shapeRow;
         const gridCol = startCol + shapeCol;
 
+        if (gridRow < 0 || gridRow > 7 || gridCol < 0 || gridCol > 7) {
+          console.log("outside grid");
+          return;
+        }
+
+        if (gameState.gridData[gridRow][gridCol] !== null) {
+          console.log("grid coordinate already occupied");
+          return;
+        }
+
         gridData[gridRow][gridCol] = color;
-        
+        console.log(gridData);
       }
     }
   }
 }
 
-
 placeOnGrid(SHAPES.L_STANDARD, 1, 2, "GREEN");
 placeOnGrid(SHAPES.SQUARE_2, 0, 0, "YELLOW");
 placeOnGrid(SHAPES.T_SHAPE, 0, 2, "RED");
 placeOnGrid(SHAPES.SQUARE_3, 0, 5, "PURPLE");
-// placeOnGrid(SHAPES.DOT, 7, 7, "BLUE");
-// placeOnGrid(SHAPES.S_SHAPE, 6, 0, "GREEN");
-// placeOnGrid(SHAPES.Z_SHAPE, 5, 2, "YELLOW");
-// placeOnGrid(SHAPES.CORNER_2, 5, 0, "BLUE");
-// placeOnGrid(SHAPES.LINE_5, 7, 2, "CYAN");
-// placeOnGrid(SHAPES.LINE_4, 4, 0, "PURPLE");
-// placeOnGrid(SHAPES.LINE_3, 6, 5, "PURPLE");
-// placeOnGrid(SHAPES.L_BIG, 1, 4, "ORANGE");
-// placeOnGrid(SHAPES.L_SMALL, 2, 0, "CYAN");
-// placeOnGrid(SHAPES.RECT, 4, 4, "RED");
 
 
-export { drawGrid };
+export { drawGrid, placeOnGrid };

@@ -1,5 +1,6 @@
 import { gameState } from "./gameStates.js";
 import { SHAPES } from "./shapes.js";
+import { placeOnGrid } from "./grid.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
@@ -107,6 +108,7 @@ function initDragControls() {
       if (isPointInRect(clickX, clickY, shapeLeft, shapeTop, shape.w, shape.h)) {
         shape.isDragging = true;
         shape.scale = 1;
+        shape.y = clickY - 110;
       }
 
       console.log(shape, rect, e);
@@ -120,13 +122,32 @@ function initDragControls() {
     gameState.hand.forEach((shape) => {
       if (shape.isDragging) {
         shape.x = clickX;
-        shape.y = clickY;
+        shape.y = clickY - 110;
       }
     });
   });
 
   gameState.canvas.addEventListener("pointerup", () => {
     gameState.hand.forEach((shape) => {
+      if (shape.isDragging) {
+        const gridWidth = 8 * 55;
+        const gridStartX = (GAME_WIDTH - gridWidth) / 2;
+        const gridStartY = 160;
+
+        const shapeWidthInCells = shape.template[0].length;
+        
+        const gridRow = Math.floor((shape.y - gridStartY) / 55);
+        const gridCol = Math.floor((shape.x - gridStartX) / 55) - Math.floor(shapeWidthInCells / 2);
+
+        shape.gridRow = gridRow;
+        shape.gridCol = gridCol;
+
+        if (shape.gridRow !== undefined && shape.gridCol !== undefined) {
+          placeOnGrid(shape.template, shape.gridRow, shape.gridCol, shape.colorKey);
+          console.log(shape.gridRow, shape.gridCol);
+        }
+      }
+
       shape.isDragging = false;
       shape.reset();
     });
