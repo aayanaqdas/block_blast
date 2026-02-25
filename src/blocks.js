@@ -34,6 +34,8 @@ class DraggableShape {
     this.dragOffsetX = 0;
     this.dragOffsetY = 0;
 
+    this.visualOffsetY = -110;
+
     const handWidth = GAME_WIDTH / 3;
     this.spawnX = handWidth * handIndex + handWidth / 2;
     this.spawnY = GAME_HEIGHT - 150;
@@ -55,11 +57,13 @@ class DraggableShape {
     this.w = shapeWidth;
     this.h = shapeHeight;
 
+    const drawY = this.isDragging ? this.y + this.visualOffsetY : this.y;
+
     this.template.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
         if (cell === 1) {
           const blockX = this.x + cellIndex * displayCellSize - shapeWidth / 2;
-          const blockY = this.y + rowIndex * displayCellSize - shapeHeight / 2;
+          const blockY = drawY + rowIndex * displayCellSize - shapeHeight / 2;
 
           drawBlock(
             ctx,
@@ -104,6 +108,10 @@ function drawHand(ctx) {
   });
 }
 
+function isPointInRect(clickX, clickY, x, y, width, height) {
+  return clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height;
+}
+
 function initDragControls() {
   gameState.canvas.addEventListener("pointerdown", (e) => {
     const rect = gameState.canvas.getBoundingClientRect();
@@ -129,8 +137,6 @@ function initDragControls() {
         shape.x = clickX - shape.dragOffsetX;
         shape.y = clickY - shape.dragOffsetY;
       }
-
-      console.log(shape, rect, e);
     });
   });
 
@@ -142,27 +148,45 @@ function initDragControls() {
       if (shape.isDragging) {
         shape.x = clickX - shape.dragOffsetX;
         shape.y = clickY - shape.dragOffsetY;
+
+        const shapeHeight = shape.template.length * CELL_SIZE;
+        const shapeWidth = shape.template[0].length * CELL_SIZE;
+
+        const shapeTopLeftX = shape.x - shapeWidth / 2;
+        const shapeTopLeftY = shape.y + shape.visualOffsetY - shapeHeight / 2;
+
+        const gridRow = Math.round((shapeTopLeftY - gridStartY) / CELL_SIZE);
+        const gridCol = Math.round((shapeTopLeftX - gridStartX) / CELL_SIZE);
+
+        if (isValidPlacement(shape.template, gridRow, gridCol)) {
+          gameState.ghostPreview = {
+            template: shape.template,
+            colorKey: shape.colorKey,
+            gridRow: gridRow,
+            gridCol: gridCol,
+          };
+        } else {
+          gameState.ghostPreview = null;
+        }
       }
     });
   });
 
   gameState.canvas.addEventListener("pointerup", () => {
+    gameState.ghostPreview = null;
     gameState.hand.forEach((shape) => {
       if (shape.isDragging) {
         const shapeHeight = shape.template.length * CELL_SIZE;
         const shapeWidth = shape.template[0].length * CELL_SIZE;
 
         const shapeTopLeftX = shape.x - shapeWidth / 2;
-        const shapeTopLeftY = shape.y - shapeHeight / 2;
+        const shapeTopLeftY = shape.y + shape.visualOffsetY - shapeHeight / 2;
 
         const gridRow = Math.round((shapeTopLeftY - gridStartY) / CELL_SIZE);
         const gridCol = Math.round((shapeTopLeftX - gridStartX) / CELL_SIZE);
 
-        shape.gridRow = gridRow;
-        shape.gridCol = gridCol;
-
-        if (isValidPlacement(shape.template, shape.gridRow, shape.gridCol)) {
-          placeOnGrid(shape.template, shape.gridRow, shape.gridCol, shape.colorKey);
+        if (isValidPlacement(shape.template, gridRow, gridCol)) {
+          placeOnGrid(shape.template, gridRow, gridCol, shape.colorKey);
 
           //Remove from hand
           const index = gameState.hand.indexOf(shape);
@@ -171,18 +195,36 @@ function initDragControls() {
           if (gameState.hand.length === 0) {
             createHand();
           }
-          console.log(shape.gridRow, shape.gridCol);
         }
       }
-
+      gameState.ghostPreview = null;
       shape.isDragging = false;
       shape.reset();
     });
   });
 }
 
-function isPointInRect(clickX, clickY, x, y, width, height) {
-  return clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height;
+function drawGhost(ctx) {
+  if (!gameState.ghostPreview) return;
+
+  const { template, colorKey, gridRow, gridCol } = gameState.ghostPreview;
+
+  ctx.save();
+  ctx.globalAlpha = 0.3;
+
+  template.forEach((row, rowIndex) => {
+    row.forEach((cell, cellIndex) => {
+      if (cell === 1) {
+        const x = gridStartX + (gridCol + cellIndex) * CELL_SIZE;
+        const y = gridStartY + (gridRow + rowIndex) * CELL_SIZE;
+        const innerSize = CELL_SIZE - PADDING * 2;
+
+        drawBlock(ctx, x + PADDING, y + PADDING, innerSize, RADIUS, PADDING, colorKey, 1);
+      }
+    });
+  });
+
+  ctx.restore();
 }
 
 function drawBlock(ctx, x, y, innerSize, RADIUS, PADDING, colorKey, scale = 1) {
@@ -273,4 +315,4 @@ function initHand() {
   initDragControls();
 }
 
-export { drawBlock, initHand, drawHand, SHAPES };
+export { drawBlock, initHand, drawHand, drawGhost, SHAPES };

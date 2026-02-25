@@ -7,7 +7,8 @@ class GameState {
 
     this.gridData = Array.from({ length: 8 }, () => Array(8).fill(null));
     this.hand = [];
-}
+    this.ghostPreview = null;
+  }
 
   init(canvas, ctx) {
     this.canvas = canvas;

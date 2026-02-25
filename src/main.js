@@ -1,6 +1,6 @@
 import { gameState } from "./gameStates.js";
 import { drawGrid } from "./grid.js";
-import { initHand, drawHand } from "./blocks.js";
+import { initHand, drawHand, drawGhost } from "./blocks.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -29,7 +29,9 @@ function initCanvas() {
 function gameLoop() {
   ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
   drawGrid(ctx);
+  drawGhost(ctx);
   drawHand(ctx);
+
   requestAnimationFrame(gameLoop);
 }
 

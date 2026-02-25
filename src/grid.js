@@ -78,12 +78,11 @@ function placeOnGrid(template, startRow, startCol, color) {
       }
     }
   }
-  console.log(gridData);
 }
 
-placeOnGrid(SHAPES.L_STANDARD, 1, 2, "GREEN");
-placeOnGrid(SHAPES.SQUARE_2, 0, 0, "YELLOW");
-placeOnGrid(SHAPES.T_SHAPE, 0, 2, "RED");
-placeOnGrid(SHAPES.SQUARE_3, 0, 5, "PURPLE");
+// placeOnGrid(SHAPES.L_STANDARD, 1, 2, "GREEN");
+// placeOnGrid(SHAPES.SQUARE_2, 0, 0, "YELLOW");
+// placeOnGrid(SHAPES.T_SHAPE, 0, 2, "RED");
+// placeOnGrid(SHAPES.SQUARE_3, 0, 5, "PURPLE");
 
 export { drawGrid, placeOnGrid, isValidPlacement };
