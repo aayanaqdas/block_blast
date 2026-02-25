@@ -1,9 +1,16 @@
 import { gameState } from "./gameStates.js";
 import { SHAPES } from "./shapes.js";
-import { placeOnGrid } from "./grid.js";
+import { placeOnGrid, isValidPlacement } from "./grid.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
+
+const gridWidth = 8 * 55;
+const gridStartX = (GAME_WIDTH - gridWidth) / 2;
+const gridStartY = 160;
+const CELL_SIZE = 55;
+const PADDING = 1;
+const RADIUS = 3;
 
 const BLOCK_COLORS = {
   CYAN: "#2ee6e6",
@@ -24,6 +31,9 @@ class DraggableShape {
     this.isDragging = false;
     this.scale = 0.5;
 
+    this.dragOffsetX = 0;
+    this.dragOffsetY = 0;
+
     const handWidth = GAME_WIDTH / 3;
     this.spawnX = handWidth * handIndex + handWidth / 2;
     this.spawnY = GAME_HEIGHT - 150;
@@ -36,10 +46,6 @@ class DraggableShape {
   }
 
   draw(ctx) {
-    const CELL_SIZE = 55;
-    const PADDING = 1;
-    const RADIUS = 3;
-
     const displayCellSize = CELL_SIZE * this.scale;
     const innerSize = displayCellSize - PADDING * 2;
 
@@ -81,12 +87,14 @@ function createHand() {
   const shapeKeys = Object.keys(SHAPES);
   const colorKeys = Object.keys(BLOCK_COLORS);
 
-  for (let i = 0; i < 3; i++) {
-    const shape = SHAPES[shapeKeys[Math.floor(Math.random() * shapeKeys.length)]];
-    const color = colorKeys[Math.floor(Math.random() * colorKeys.length)];
+  if (gameState.hand.length === 0) {
+    for (let i = 0; i < 3; i++) {
+      const shape = SHAPES[shapeKeys[Math.floor(Math.random() * shapeKeys.length)]];
+      const color = colorKeys[Math.floor(Math.random() * colorKeys.length)];
 
-    const newShape = new DraggableShape(shape, color, i);
-    gameState.hand.push(newShape);
+      const newShape = new DraggableShape(shape, color, i);
+      gameState.hand.push(newShape);
+    }
   }
 }
 
@@ -103,12 +111,23 @@ function initDragControls() {
     const clickY = ((e.clientY - rect.top) / rect.height) * GAME_HEIGHT;
 
     gameState.hand.forEach((shape) => {
-      const shapeLeft = shape.x - shape.w / 2;
-      const shapeTop = shape.y - shape.h / 2;
-      if (isPointInRect(clickX, clickY, shapeLeft, shapeTop, shape.w, shape.h)) {
+      const displayCellSize = CELL_SIZE * shape.scale;
+      const shapeWidth = shape.template[0].length * displayCellSize;
+      const shapeHeight = shape.template.length * displayCellSize;
+      const shapeLeft = shape.x - shapeWidth / 2;
+      const shapeTop = shape.y - shapeHeight / 2;
+      if (isPointInRect(clickX, clickY, shapeLeft, shapeTop, shapeWidth, shapeHeight)) {
         shape.isDragging = true;
+
+        //Offset before scaling
+        shape.dragOffsetX = clickX - shape.x;
+        shape.dragOffsetY = clickY - shape.y;
+
         shape.scale = 1;
-        shape.y = clickY - 110;
+
+        //Offset after scale
+        shape.x = clickX - shape.dragOffsetX;
+        shape.y = clickY - shape.dragOffsetY;
       }
 
       console.log(shape, rect, e);
@@ -121,8 +140,8 @@ function initDragControls() {
     const clickY = ((e.clientY - rect.top) / rect.height) * GAME_HEIGHT;
     gameState.hand.forEach((shape) => {
       if (shape.isDragging) {
-        shape.x = clickX;
-        shape.y = clickY - 110;
+        shape.x = clickX - shape.dragOffsetX;
+        shape.y = clickY - shape.dragOffsetY;
       }
     });
   });
@@ -130,20 +149,28 @@ function initDragControls() {
   gameState.canvas.addEventListener("pointerup", () => {
     gameState.hand.forEach((shape) => {
       if (shape.isDragging) {
-        const gridWidth = 8 * 55;
-        const gridStartX = (GAME_WIDTH - gridWidth) / 2;
-        const gridStartY = 160;
+        const shapeHeight = shape.template.length * CELL_SIZE;
+        const shapeWidth = shape.template[0].length * CELL_SIZE;
 
-        const shapeWidthInCells = shape.template[0].length;
-        
-        const gridRow = Math.floor((shape.y - gridStartY) / 55);
-        const gridCol = Math.floor((shape.x - gridStartX) / 55) - Math.floor(shapeWidthInCells / 2);
+        const shapeTopLeftX = shape.x - shapeWidth / 2;
+        const shapeTopLeftY = shape.y - shapeHeight / 2;
+
+        const gridRow = Math.round((shapeTopLeftY - gridStartY) / CELL_SIZE);
+        const gridCol = Math.round((shapeTopLeftX - gridStartX) / CELL_SIZE);
 
         shape.gridRow = gridRow;
         shape.gridCol = gridCol;
 
-        if (shape.gridRow !== undefined && shape.gridCol !== undefined) {
+        if (isValidPlacement(shape.template, shape.gridRow, shape.gridCol)) {
           placeOnGrid(shape.template, shape.gridRow, shape.gridCol, shape.colorKey);
+
+          //Remove from hand
+          const index = gameState.hand.indexOf(shape);
+          gameState.hand.splice(index, 1);
+
+          if (gameState.hand.length === 0) {
+            createHand();
+          }
           console.log(shape.gridRow, shape.gridCol);
         }
       }

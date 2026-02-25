@@ -46,28 +46,39 @@ function drawGrid(ctx) {
   }
 }
 
-function placeOnGrid(shape, startRow, startCol, color) {
-  for (let shapeRow = 0; shapeRow < shape.length; shapeRow++) {
-    for (let shapeCol = 0; shapeCol < shape[shapeRow].length; shapeCol++) {
-      if (shape[shapeRow][shapeCol] === 1) {
+function isValidPlacement(template, startRow, startCol) {
+  for (let shapeRow = 0; shapeRow < template.length; shapeRow++) {
+    for (let shapeCol = 0; shapeCol < template[shapeRow].length; shapeCol++) {
+      if (template[shapeRow][shapeCol] === 1) {
         const gridRow = startRow + shapeRow;
         const gridCol = startCol + shapeCol;
 
         if (gridRow < 0 || gridRow > 7 || gridCol < 0 || gridCol > 7) {
-          console.log("outside grid");
-          return;
+          return false;
         }
 
         if (gameState.gridData[gridRow][gridCol] !== null) {
-          console.log("grid coordinate already occupied");
-          return;
+          return false;
         }
-
-        gridData[gridRow][gridCol] = color;
-        console.log(gridData);
       }
     }
   }
+
+  return true;
+}
+
+function placeOnGrid(template, startRow, startCol, color) {
+  for (let shapeRow = 0; shapeRow < template.length; shapeRow++) {
+    for (let shapeCol = 0; shapeCol < template[shapeRow].length; shapeCol++) {
+      if (template[shapeRow][shapeCol] === 1) {
+        const gridRow = startRow + shapeRow;
+        const gridCol = startCol + shapeCol;
+
+        gridData[gridRow][gridCol] = color;
+      }
+    }
+  }
+  console.log(gridData);
 }
 
 placeOnGrid(SHAPES.L_STANDARD, 1, 2, "GREEN");
@@ -75,5 +86,4 @@ placeOnGrid(SHAPES.SQUARE_2, 0, 0, "YELLOW");
 placeOnGrid(SHAPES.T_SHAPE, 0, 2, "RED");
 placeOnGrid(SHAPES.SQUARE_3, 0, 5, "PURPLE");
 
-
-export { drawGrid, placeOnGrid };
+export { drawGrid, placeOnGrid, isValidPlacement };
