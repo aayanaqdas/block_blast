@@ -78,11 +78,31 @@ function placeOnGrid(template, startRow, startCol, color) {
       }
     }
   }
+  clearFromGrid();
 }
 
-// placeOnGrid(SHAPES.L_STANDARD, 1, 2, "GREEN");
-// placeOnGrid(SHAPES.SQUARE_2, 0, 0, "YELLOW");
-// placeOnGrid(SHAPES.T_SHAPE, 0, 2, "RED");
-// placeOnGrid(SHAPES.SQUARE_3, 0, 5, "PURPLE");
+function clearFromGrid() {
+  const rowFull = [];
+  const colFull = [];
+
+  for (let i = 0; i < GRID_SIZE; i++) {
+    rowFull[i] = gridData[i].every((cell) => cell !== null);
+    colFull[i] = gridData.every((row) => row[i] !== null);
+  }
+
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      if (rowFull[r] || colFull[c]) {
+        gridData[r][c] = null;
+      }
+    }
+  }
+}
+
+//Test blocks
+placeOnGrid(SHAPES.RECT, 0, 0, "RED");
+placeOnGrid(SHAPES.SQUARE_2, 0, 3, "CYAN");
+placeOnGrid(SHAPES.SQUARE_3, 2, 5, "BLUE");
+placeOnGrid(SHAPES.SQUARE_3, 5, 5, "PURPLE");
 
 export { drawGrid, placeOnGrid, isValidPlacement };
