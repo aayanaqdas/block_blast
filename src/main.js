@@ -1,6 +1,7 @@
 import { gameState } from "./gameStates.js";
 import { drawGrid } from "./grid.js";
-import { initHand, drawHand, drawGhost } from "./blocks.js";
+import { initHand, drawHand } from "./hand.js";
+import { drawGhost } from "./blocks.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
