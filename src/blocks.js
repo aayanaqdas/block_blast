@@ -3,7 +3,8 @@ import { gameState } from "./gameStates.js";
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
 
-const gridWidth = 8 * 55;
+const GRID_SIZE = 8;
+const gridWidth = GRID_SIZE * 55;
 const gridStartX = (GAME_WIDTH - gridWidth) / 2;
 const gridStartY = 160;
 const CELL_SIZE = 55;
@@ -25,9 +26,21 @@ function drawGhost(ctx) {
 
   const { template, colorKey, gridRow, gridCol } = gameState.ghostPreview;
 
+  const tempGrid = gameState.gridData.map((row) => [...row]);
+
+  template.forEach((row, rowIndex) => {
+    row.forEach((cell, cellIndex) => {
+      if (cell === 1) {
+        const r = gridRow + rowIndex;
+        const c = gridCol + cellIndex;
+
+        tempGrid[r][c] = colorKey;
+      }
+    });
+  });
+
   ctx.save();
   ctx.globalAlpha = 0.3;
-
   template.forEach((row, rowIndex) => {
     row.forEach((cell, cellIndex) => {
       if (cell === 1) {
@@ -41,6 +54,32 @@ function drawGhost(ctx) {
   });
 
   ctx.restore();
+
+  ctx.save();
+  highlightLine(ctx, tempGrid, colorKey);
+  ctx.restore();
+}
+
+function highlightLine(ctx, grid, colorKey) {
+  const rowFull = [];
+  const colFull = [];
+
+  for (let i = 0; i < GRID_SIZE; i++) {
+    rowFull[i] = grid[i].every((cell) => cell !== null);
+    colFull[i] = grid.every((row) => row[i] !== null);
+  }
+
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      if (rowFull[r] || colFull[c]) {
+        const x = gridStartX + c * CELL_SIZE;
+        const y = gridStartY + r * CELL_SIZE;
+        const innerSize = CELL_SIZE - PADDING * 2;
+
+        drawBlock(ctx, x + PADDING, y + PADDING, innerSize, RADIUS, PADDING, colorKey, 1);
+      }
+    }
+  }
 }
 
 function drawBlock(ctx, x, y, innerSize, RADIUS, PADDING, colorKey, scale = 1) {
