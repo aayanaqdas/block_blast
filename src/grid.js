@@ -47,6 +47,16 @@ function drawGrid(ctx) {
   }
 }
 
+function calculateOpenSpace(grid) {
+  let openCells = 0;
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      if (grid[r][c] === null) openCells++;
+    }
+  }
+  return openCells;
+}
+
 function isValidPlacement(grid, template, startRow, startCol) {
   for (let shapeRow = 0; shapeRow < template.length; shapeRow++) {
     for (let shapeCol = 0; shapeCol < template[shapeRow].length; shapeCol++) {
@@ -79,16 +89,45 @@ function placeOnGrid(template, startRow, startCol, color) {
       }
     }
   }
-  clearFromGrid(gridData);
+  const linesCleared = clearFromGrid(gridData);
+
+  if (linesCleared > 0) {
+    gameState.movesSinceLastClear = 0;
+    if (gameState.lastMoveCleared || gameState.streak > 0) {
+      gameState.streak++;
+    } else {
+      gameState.streak = 1;
+    }
+    gameState.lastMoveCleared = true;
+
+    gameState.streakMultiplier = Math.min(gameState.streak, 10);
+    const points = linesCleared * 10 * gameState.streakMultiplier;
+    gameState.score += points;
+    console.log(
+      `Cleared ${linesCleared} lines. Streak: ${gameState.streak}x | +${points} pts. Total: ${gameState.score}`,
+    );
+  } else {
+    gameState.lastMoveCleared = false;
+    gameState.movesSinceLastClear++;
+    
+    // 3 turns grace period before combo resets
+    if (gameState.movesSinceLastClear >= 3) {
+      gameState.streak = 0;
+      gameState.streakMultiplier = 1;
+    }
+  }
 }
 
 function clearFromGrid(grid) {
   const rowFull = [];
   const colFull = [];
+  let linesCleared = 0;
 
   for (let i = 0; i < GRID_SIZE; i++) {
     rowFull[i] = grid[i].every((cell) => cell !== null);
     colFull[i] = grid.every((row) => row[i] !== null);
+    if (rowFull[i]) linesCleared++;
+    if (colFull[i]) linesCleared++;
   }
 
   for (let r = 0; r < GRID_SIZE; r++) {
@@ -98,14 +137,16 @@ function clearFromGrid(grid) {
       }
     }
   }
+
+  return linesCleared;
 }
 
-//Test blocks
-//placeOnGrid(SHAPES.DOT, 1, 5, "ORANGE");
-//placeOnGrid(SHAPES.Z_SHAPE, 0, 5, "GREEN");
-placeOnGrid(SHAPES.RECT, 0, 0, "RED");
-placeOnGrid(SHAPES.SQUARE_2, 0, 3, "CYAN");
-placeOnGrid(SHAPES.SQUARE_3, 2, 5, "BLUE");
-placeOnGrid(SHAPES.SQUARE_3, 5, 5, "PURPLE");
 
-export { drawGrid, placeOnGrid, isValidPlacement, clearFromGrid };
+
+export {
+  drawGrid,
+  placeOnGrid,
+  isValidPlacement,
+  clearFromGrid,
+  calculateOpenSpace
+};

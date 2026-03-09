@@ -8,6 +8,14 @@ class GameState {
     this.gridData = Array.from({ length: 8 }, () => Array(8).fill(null));
     this.hand = [];
     this.ghostPreview = null;
+
+    this.streak = 0;
+    this.movesSinceLastClear = 0;
+    this.lastMoveCleared = false;
+    this.score = 0;
+    this.streakMultiplier = 1;
+
+    this.isGameOver = false;
   }
 
   init(canvas, ctx) {
