@@ -1,47 +1,28 @@
 import { gameState } from "./gameStates.js";
 import { drawBlock } from "./blocks.js";
-import { SHAPES } from "./shapes.js";
+import { spriteMap } from "./spritemap.js";
 
-const GRID_SIZE = 8;
-const CELL_SIZE = 55;
-const PADDING = 1;
-const RADIUS = 3;
-
-const GAME_WIDTH = gameState.GAME_WIDTH;
-const GAME_HEIGHT = gameState.GAME_HEIGHT;
+const GRID_SIZE = gameState.GRID_SIZE;
+const CELL_SIZE = gameState.CELL_SIZE;
 const gridData = gameState.gridData;
 
-function drawGrid(ctx) {
-  const gridWidth = GRID_SIZE * CELL_SIZE;
+function drawGrid(ctx, spritesheet) {
+  const xOffSet = gameState.gridXOffSet;
+  const yOffSet = gameState.gridYOffSet;
 
-  const xOffSet = (GAME_WIDTH - gridWidth) / 2;
-  const yOffSet = 160;
-
-  ctx.fillStyle = "#1a2244";
-  ctx.beginPath();
-  ctx.roundRect(
-    xOffSet - PADDING,
-    yOffSet - PADDING,
-    gridWidth + PADDING * 2,
-    gridWidth + PADDING * 2,
-    RADIUS,
-  );
-  ctx.fill();
+  const tile = spriteMap.board.tile;
 
   for (let row = 0; row < GRID_SIZE; row++) {
     for (let column = 0; column < GRID_SIZE; column++) {
       const x = xOffSet + column * CELL_SIZE;
       const y = yOffSet + row * CELL_SIZE;
-      const innerSize = CELL_SIZE - PADDING * 2;
+
       const colorKey = gridData[row][column];
 
-      ctx.fillStyle = "#242c54";
-      ctx.beginPath();
-      ctx.roundRect(x + PADDING, y + PADDING, innerSize, innerSize, RADIUS);
-      ctx.fill();
+      ctx.drawImage(spritesheet, tile.sx, tile.sy, tile.sw, tile.sh, x, y, CELL_SIZE, CELL_SIZE);
 
       if (colorKey !== null) {
-        drawBlock(ctx, x + PADDING, y + PADDING, innerSize, RADIUS, PADDING, colorKey);
+        drawBlock(ctx, x, y, colorKey, 1);
       }
     }
   }
@@ -109,7 +90,7 @@ function placeOnGrid(template, startRow, startCol, color) {
   } else {
     gameState.lastMoveCleared = false;
     gameState.movesSinceLastClear++;
-    
+
     // 3 turns grace period before combo resets
     if (gameState.movesSinceLastClear >= 3) {
       gameState.streak = 0;
@@ -141,12 +122,4 @@ function clearFromGrid(grid) {
   return linesCleared;
 }
 
-
-
-export {
-  drawGrid,
-  placeOnGrid,
-  isValidPlacement,
-  clearFromGrid,
-  calculateOpenSpace
-};
+export { drawGrid, placeOnGrid, isValidPlacement, clearFromGrid, calculateOpenSpace };

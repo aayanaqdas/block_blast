@@ -6,23 +6,19 @@ import { SHAPES, CHUNKS, SPANNERS, FILLERS, HELPERS } from "./shapes.js";
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
 
-const GRID_SIZE = 8;
-const CELL_SIZE = 55;
-const PADDING = 1;
-const RADIUS = 3;
+const GRID_SIZE = gameState.GRID_SIZE;
+const CELL_SIZE = gameState.CELL_SIZE;
 
-const gridWidth = GRID_SIZE * 55;
-const gridStartX = (GAME_WIDTH - gridWidth) / 2;
-const gridStartY = 160;
+const gridStartX = gameState.gridXOffSet;
+const gridStartY = gameState.gridYOffSet;
 
 class DraggableShape {
   constructor(template, colorKey, handIndex) {
     this.template = template;
     this.colorKey = colorKey;
-    this.color = BLOCK_COLORS[colorKey];
 
     this.isDragging = false;
-    this.scale = 0.5;
+    this.scale = 0.4;
 
     this.dragOffsetX = 0;
     this.dragOffsetY = 0;
@@ -31,7 +27,7 @@ class DraggableShape {
 
     const handWidth = GAME_WIDTH / 3;
     this.spawnX = handWidth * handIndex + handWidth / 2;
-    this.spawnY = GAME_HEIGHT - 150;
+    this.spawnY = GAME_HEIGHT - 210;
 
     this.x = this.spawnX;
     this.y = this.spawnY;
@@ -42,7 +38,6 @@ class DraggableShape {
 
   draw(ctx) {
     const displayCellSize = CELL_SIZE * this.scale;
-    const innerSize = displayCellSize - PADDING * 2;
 
     const shapeWidth = this.template[0].length * displayCellSize;
     const shapeHeight = this.template.length * displayCellSize;
@@ -58,16 +53,7 @@ class DraggableShape {
           const blockX = this.x + cellIndex * displayCellSize - shapeWidth / 2;
           const blockY = drawY + rowIndex * displayCellSize - shapeHeight / 2;
 
-          drawBlock(
-            ctx,
-            blockX + PADDING,
-            blockY + PADDING,
-            innerSize,
-            RADIUS * this.scale,
-            PADDING,
-            this.colorKey,
-            this.scale,
-          );
+          drawBlock(ctx, blockX, blockY, this.colorKey, this.scale);
         }
       });
     });
@@ -76,7 +62,7 @@ class DraggableShape {
   reset() {
     this.x = this.spawnX;
     this.y = this.spawnY;
-    this.scale = 0.5;
+    this.scale = 0.4;
   }
 }
 
@@ -237,7 +223,7 @@ function pickFromPool(pool, exclude) {
 let recentShapeHistory = [];
 
 function createHand() {
-  const colorKeys = Object.keys(BLOCK_COLORS);
+  const colorKeys = BLOCK_COLORS;
   const openSpace = calculateOpenSpace(gameState.gridData);
   const fillPercent = 1 - openSpace / (GRID_SIZE * GRID_SIZE);
   const boardNeeds = analyzeBoardNeeds(gameState.gridData);
@@ -361,9 +347,9 @@ function createHand() {
 
     gameState.hand = pick.hand;
     recentShapeHistory = pick.names;
-    console.log(
-      `Hand: [${pick.names.join(", ")}] | clears: ${pick.clears}, setup: ${pick.setup.toFixed(0)}, blocks: ${pick.totalBlocks}, score: ${pick.score.toFixed(1)} | fill: ${(fillPercent * 100).toFixed(0)}% | near-clear: ${nearClearCount} | candidates: ${candidates.length}`,
-    );
+    // console.log(
+    //   `Hand: [${pick.names.join(", ")}] | clears: ${pick.clears}, setup: ${pick.setup.toFixed(0)}, blocks: ${pick.totalBlocks}, score: ${pick.score.toFixed(1)} | fill: ${(fillPercent * 100).toFixed(0)}% | near-clear: ${nearClearCount} | candidates: ${candidates.length}`,
+    // );
     return;
   }
 
