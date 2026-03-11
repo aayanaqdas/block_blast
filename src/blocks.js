@@ -1,5 +1,5 @@
 import { gameState } from "./gameStates.js";
-import { spriteMap } from "./spritemap.js";
+import { spriteMap } from "./spriteMap.js";
 
 const GRID_SIZE = gameState.GRID_SIZE;
 const CELL_SIZE = gameState.CELL_SIZE;
@@ -8,16 +8,13 @@ const gridStartY = gameState.gridYOffSet;
 
 const BLOCK_COLORS = ["cyan", "blue", "green", "yellow", "red", "purple", "pink", "silver"];
 
-const blockSpriteSheet = new Image();
-blockSpriteSheet.src = "./assets/assets/img/new_ui.png";
-
 function drawBlock(ctx, x, y, colorKey, scale) {
   const spriteData = spriteMap.blocks[colorKey];
-  if (!spriteData || !blockSpriteSheet.complete) return;
+  if (!spriteData || !gameState.spriteSheet.complete) return;
 
   const size = CELL_SIZE * scale;
   ctx.drawImage(
-    blockSpriteSheet,
+    gameState.spriteSheet,
     spriteData.sx,
     spriteData.sy,
     spriteData.sw,

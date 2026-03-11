@@ -1,6 +1,6 @@
 import { gameState } from "./gameStates.js";
 import { drawBlock } from "./blocks.js";
-import { spriteMap } from "./spritemap.js";
+import { spriteMap } from "./spriteMap.js";
 
 const GRID_SIZE = gameState.GRID_SIZE;
 const CELL_SIZE = gameState.CELL_SIZE;
