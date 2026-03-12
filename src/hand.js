@@ -2,15 +2,13 @@ import { gameState } from "./gameStates.js";
 import { placeOnGrid, isValidPlacement, clearFromGrid, calculateOpenSpace } from "./grid.js";
 import { drawBlock, BLOCK_COLORS } from "./blocks.js";
 import { SHAPES, CHUNKS, SPANNERS, FILLERS, HELPERS } from "./shapes.js";
+import { getGridOffsets } from "./grid.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
 
 const GRID_SIZE = gameState.GRID_SIZE;
 const CELL_SIZE = gameState.CELL_SIZE;
-
-const gridStartX = gameState.gridXOffSet;
-const gridStartY = gameState.gridYOffSet;
 
 class DraggableShape {
   constructor(template, colorKey, handIndex) {
@@ -395,6 +393,8 @@ function isPointInRect(clickX, clickY, x, y, width, height) {
 }
 
 function initDragControls() {
+  const { gridXOffSet, gridYOffSet} = getGridOffsets();
+
   gameState.canvas.addEventListener("pointerdown", (e) => {
     const rect = gameState.canvas.getBoundingClientRect();
     const clickX = ((e.clientX - rect.left) / rect.width) * GAME_WIDTH;
@@ -432,8 +432,8 @@ function initDragControls() {
         const shapeTopLeftX = shape.x - shapeWidth / 2;
         const shapeTopLeftY = shape.y + shape.visualOffsetY - shapeHeight / 2;
 
-        const gridRow = Math.round((shapeTopLeftY - gridStartY) / CELL_SIZE);
-        const gridCol = Math.round((shapeTopLeftX - gridStartX) / CELL_SIZE);
+        const gridRow = Math.round((shapeTopLeftY - gridYOffSet) / CELL_SIZE);
+        const gridCol = Math.round((shapeTopLeftX - gridXOffSet) / CELL_SIZE);
 
         if (isValidPlacement(gameState.gridData, shape.template, gridRow, gridCol)) {
           gameState.ghostPreview = {
@@ -459,8 +459,8 @@ function initDragControls() {
         const shapeTopLeftX = shape.x - shapeWidth / 2;
         const shapeTopLeftY = shape.y + shape.visualOffsetY - shapeHeight / 2;
 
-        const gridRow = Math.round((shapeTopLeftY - gridStartY) / CELL_SIZE);
-        const gridCol = Math.round((shapeTopLeftX - gridStartX) / CELL_SIZE);
+        const gridRow = Math.round((shapeTopLeftY - gridYOffSet) / CELL_SIZE);
+        const gridCol = Math.round((shapeTopLeftX - gridXOffSet) / CELL_SIZE);
 
         if (isValidPlacement(gameState.gridData, shape.template, gridRow, gridCol)) {
           placeOnGrid(shape.template, gridRow, gridCol, shape.colorKey);

@@ -1,29 +1,15 @@
 import { gameState } from "./gameStates.js";
-import { drawGrid } from "./grid.js";
+import { img, loadAssets } from "./assets.js";
+import { initLayout, layout } from "./layout.js";
+import { intiGrid, drawGrid } from "./grid.js";
 import { initHand, drawHand } from "./hand.js";
 import { drawGhost } from "./blocks.js";
-
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
-
-const bg = new Image();
-bg.src = "./assets/assets/img/bg_game.jpg";
-const boardOutline = new Image();
-boardOutline.src = "./images/board.png";
-const topBg = new Image();
-topBg.src = "./images/top_bg.png";
-const bottomBg = new Image();
-bottomBg.src = "./images/touch_bg.png";
-const plantTop = new Image();
-plantTop.src = "./images/plant_top.png";
-const plantBottom = new Image();
-plantBottom.src = "./images/plant_bottom.png";
-const uiSheet = new Image();
-uiSheet.src = "./images/new_ui.png";
 
 function initCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -45,18 +31,14 @@ function initCanvas() {
 
 function gameLoop() {
   ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-  ctx.drawImage(bg, 0, 0);
+  ctx.drawImage(img.bg, 0, 0);
 
-  ctx.drawImage(topBg, GAME_WIDTH / 2 - topBg.width / 2, plantTop.height / 2);
-  drawGrid(ctx, uiSheet);
-  ctx.drawImage(boardOutline, GAME_WIDTH / 2 - boardOutline.width / 2, 210);
-  ctx.drawImage(
-    bottomBg,
-    GAME_WIDTH / 2 - bottomBg.width / 2,
-    GAME_HEIGHT - plantBottom.height * 2,
-  );
-  ctx.drawImage(plantTop, GAME_WIDTH / 2 - plantTop.width / 2, 0);
-  ctx.drawImage(plantBottom, GAME_WIDTH / 2 - plantTop.width / 2, GAME_HEIGHT - plantBottom.height);
+  ctx.drawImage(img.topBg, layout.topBg.x, layout.topBg.y);
+  drawGrid(ctx);
+  ctx.drawImage(img.gridOutline, layout.gridOutline.x, layout.gridOutline.y);
+  ctx.drawImage(img.bottomBg, layout.bottomBg.x, layout.bottomBg.y);
+  ctx.drawImage(img.plantTop, layout.plantTop.x, layout.plantTop.y);
+  ctx.drawImage(img.plantBottom, layout.plantBottom.x, layout.plantBottom.y);
 
   drawGhost(ctx);
   drawHand(ctx);
@@ -65,11 +47,15 @@ function gameLoop() {
 }
 
 function initGame() {
-  gameState.init(canvas, ctx, uiSheet);
-  initCanvas();
-  initHand();
-  window.addEventListener("resize", initCanvas);
-  gameLoop();
+  loadAssets().then(() => {
+    gameState.init(canvas, ctx, img.uiSheet);
+    initCanvas();
+    initLayout(img);
+    intiGrid(img.gridOutline);
+    initHand();
+    window.addEventListener("resize", initCanvas);
+    gameLoop();
+  });
 }
 
 initGame();

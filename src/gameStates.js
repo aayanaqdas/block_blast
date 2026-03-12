@@ -9,15 +9,6 @@ class GameState {
 
     this.GRID_SIZE = 8;
     this.CELL_SIZE = 80;
-    this.gridWidth = this.GRID_SIZE * this.CELL_SIZE;
-
-    this.boardOutlineWidth = 708;
-    this.boardOutlineHeight = 711;
-    this.boardX = (this.GAME_WIDTH - this.boardOutlineWidth) / 2;
-    this.boardY = 205;
-
-    this.gridXOffSet = this.boardX + (this.boardOutlineWidth - this.gridWidth) / 2;
-    this.gridYOffSet = this.boardY + (this.boardOutlineHeight - this.gridWidth) / 2;
 
     this.gridData = Array.from({ length: 8 }, () => Array(8).fill(null));
     this.hand = [];

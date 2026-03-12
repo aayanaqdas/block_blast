@@ -1,10 +1,9 @@
 import { gameState } from "./gameStates.js";
 import { spriteMap } from "./spriteMap.js";
+import { getGridOffsets } from "./grid.js";
 
 const GRID_SIZE = gameState.GRID_SIZE;
 const CELL_SIZE = gameState.CELL_SIZE;
-const gridStartX = gameState.gridXOffSet;
-const gridStartY = gameState.gridYOffSet;
 
 const BLOCK_COLORS = ["cyan", "blue", "green", "yellow", "red", "purple", "pink", "silver"];
 
@@ -29,6 +28,7 @@ function drawBlock(ctx, x, y, colorKey, scale) {
 function drawGhost(ctx) {
   if (!gameState.ghostPreview) return;
 
+  const { gridXOffSet, gridYOffSet } = getGridOffsets();
   const { template, colorKey, gridRow, gridCol } = gameState.ghostPreview;
 
   const tempGrid = gameState.gridData.map((row) => [...row]);
@@ -49,8 +49,8 @@ function drawGhost(ctx) {
   template.forEach((row, rowIndex) => {
     row.forEach((cell, cellIndex) => {
       if (cell === 1) {
-        const x = gridStartX + (gridCol + cellIndex) * CELL_SIZE;
-        const y = gridStartY + (gridRow + rowIndex) * CELL_SIZE;
+        const x = gridXOffSet + (gridCol + cellIndex) * CELL_SIZE;
+        const y = gridYOffSet + (gridRow + rowIndex) * CELL_SIZE;
 
         drawBlock(ctx, x, y, colorKey, 1);
       }
@@ -60,11 +60,11 @@ function drawGhost(ctx) {
   ctx.restore();
 
   ctx.save();
-  highlightLine(ctx, tempGrid, colorKey);
+  highlightLine(ctx, tempGrid, colorKey, gridXOffSet, gridYOffSet);
   ctx.restore();
 }
 
-function highlightLine(ctx, grid, colorKey) {
+function highlightLine(ctx, grid, colorKey, gridXOffSet, gridYOffSet) {
   const rowFull = [];
   const colFull = [];
 
@@ -76,8 +76,8 @@ function highlightLine(ctx, grid, colorKey) {
   for (let r = 0; r < GRID_SIZE; r++) {
     for (let c = 0; c < GRID_SIZE; c++) {
       if (rowFull[r] || colFull[c]) {
-        const x = gridStartX + c * CELL_SIZE;
-        const y = gridStartY + r * CELL_SIZE;
+        const x = gridXOffSet + c * CELL_SIZE;
+        const y = gridYOffSet + r * CELL_SIZE;
 
         drawBlock(ctx, x, y, colorKey, 1);
       }

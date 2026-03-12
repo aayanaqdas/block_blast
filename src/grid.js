@@ -2,24 +2,48 @@ import { gameState } from "./gameStates.js";
 import { drawBlock } from "./blocks.js";
 import { spriteMap } from "./spriteMap.js";
 
+const GAME_WIDTH = gameState.GAME_WIDTH;
 const GRID_SIZE = gameState.GRID_SIZE;
 const CELL_SIZE = gameState.CELL_SIZE;
 const gridData = gameState.gridData;
 
-function drawGrid(ctx, spritesheet) {
-  const xOffSet = gameState.gridXOffSet;
-  const yOffSet = gameState.gridYOffSet;
+let gridXOffSet = 0;
+let gridYOffSet = 0;
 
+function intiGrid(outlineImg) {
+  const gridWidth = GRID_SIZE * CELL_SIZE;
+  const boardX = (GAME_WIDTH - outlineImg.width) / 2;
+  const boardY = 210;
+
+  gridXOffSet = boardX + (outlineImg.width - gridWidth) / 2;
+  gridYOffSet = boardY + (outlineImg.height - gridWidth) / 2;
+}
+
+function getGridOffsets() {
+  return { gridXOffSet, gridYOffSet };
+}
+
+function drawGrid(ctx) {
   const tile = spriteMap.board.tile;
 
   for (let row = 0; row < GRID_SIZE; row++) {
     for (let column = 0; column < GRID_SIZE; column++) {
-      const x = xOffSet + column * CELL_SIZE;
-      const y = yOffSet + row * CELL_SIZE;
+      const x = gridXOffSet + column * CELL_SIZE;
+      const y = gridYOffSet + row * CELL_SIZE;
 
       const colorKey = gridData[row][column];
 
-      ctx.drawImage(spritesheet, tile.sx, tile.sy, tile.sw, tile.sh, x, y, CELL_SIZE, CELL_SIZE);
+      ctx.drawImage(
+        gameState.spriteSheet,
+        tile.sx,
+        tile.sy,
+        tile.sw,
+        tile.sh,
+        x,
+        y,
+        CELL_SIZE,
+        CELL_SIZE,
+      );
 
       if (colorKey !== null) {
         drawBlock(ctx, x, y, colorKey, 1);
@@ -122,4 +146,12 @@ function clearFromGrid(grid) {
   return linesCleared;
 }
 
-export { drawGrid, placeOnGrid, isValidPlacement, clearFromGrid, calculateOpenSpace };
+export {
+  intiGrid,
+  getGridOffsets,
+  drawGrid,
+  placeOnGrid,
+  isValidPlacement,
+  clearFromGrid,
+  calculateOpenSpace,
+};
