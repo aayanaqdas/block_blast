@@ -28,4 +28,60 @@ export function initLayout(imgs) {
     x: cx - imgs.plantBottom.width / 2,
     y: H - imgs.plantBottom.height,
   };
+
+  const bgHeight = 78;
+  const bestScoreWidth = 266;
+  const scoreWidth = 266;
+  const optionsSize = 78;
+  const trophySize = 55;
+  const gap = 12;
+
+  const totalWidth = bestScoreWidth + scoreWidth + optionsSize + gap * 2;
+  const startX = cx - totalWidth / 2;
+  const rowY = layout.topBg.y + (imgs.topBg.height - bgHeight) / 2 - 7;
+
+  layout.bestScoreBg = {
+    x: startX,
+    y: rowY,
+    w: bestScoreWidth,
+    h: bgHeight,
+  };
+
+  layout.scoreTrophy = {
+    x: layout.bestScoreBg.x + gap,
+    y: layout.bestScoreBg.y + (layout.bestScoreBg.h - trophySize) / 2,
+    w: trophySize,
+    h: trophySize,
+  };
+
+  layout.scoreBg = {
+    x: startX + bestScoreWidth + gap,
+    y: rowY,
+    w: scoreWidth,
+    h: bgHeight,
+  };
+
+  layout.optionsBtn = {
+    x: startX + bestScoreWidth + gap + scoreWidth + gap,
+    y: rowY,
+    w: optionsSize,
+    h: optionsSize,
+  };
+
+  const digitHeight = 40;
+  const digitWidth = 30;
+
+  layout.bestScoreDigits = {
+    x: layout.bestScoreBg.x + (layout.bestScoreBg.w - digitWidth) / 2,
+    y: layout.bestScoreBg.y + (layout.bestScoreBg.h - digitHeight) / 2,
+    w: digitWidth,
+    h: digitHeight,
+  };
+
+  layout.scoreDigits = {
+    x: layout.scoreBg.x + (layout.scoreBg.w - digitWidth) / 2,
+    y: layout.scoreBg.y + (layout.scoreBg.h - digitHeight) / 2,
+    w: digitWidth,
+    h: digitHeight,
+  };
 }

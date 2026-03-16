@@ -4,6 +4,8 @@ import { initLayout, layout } from "./layout.js";
 import { intiGrid, drawGrid } from "./grid.js";
 import { initHand, drawHand } from "./hand.js";
 import { drawGhost } from "./blocks.js";
+import { spriteMap } from "./spriteMap.js";
+import { drawScoring } from "./score.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -33,7 +35,8 @@ function gameLoop() {
   ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
   ctx.drawImage(img.bg, 0, 0);
 
-  ctx.drawImage(img.topBg, layout.topBg.x, layout.topBg.y);
+  drawScoring(ctx);
+
   drawGrid(ctx);
   ctx.drawImage(img.gridOutline, layout.gridOutline.x, layout.gridOutline.y);
   ctx.drawImage(img.bottomBg, layout.bottomBg.x, layout.bottomBg.y);
@@ -48,7 +51,7 @@ function gameLoop() {
 
 function initGame() {
   loadAssets().then(() => {
-    gameState.init(canvas, ctx, img.uiSheet);
+    gameState.init(canvas, ctx, img.uiSheet, img.uiGameSheet);
     initCanvas();
     initLayout(img);
     intiGrid(img.gridOutline);

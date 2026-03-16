@@ -5,7 +5,7 @@ import { getGridOffsets } from "./grid.js";
 const GRID_SIZE = gameState.GRID_SIZE;
 const CELL_SIZE = gameState.CELL_SIZE;
 
-const BLOCK_COLORS = ["cyan", "blue", "green", "yellow", "red", "purple", "pink", "silver"];
+const BLOCK_COLORS = ["cyan", "blue", "green", "yellow", "red", "purple", "pink"];
 
 function drawBlock(ctx, x, y, colorKey, scale) {
   const spriteData = spriteMap.blocks[colorKey];

@@ -9,14 +9,17 @@ const gridData = gameState.gridData;
 
 let gridXOffSet = 0;
 let gridYOffSet = 0;
+let outlineW = 0;
 
 function intiGrid(outlineImg) {
   const gridWidth = GRID_SIZE * CELL_SIZE;
   const boardX = (GAME_WIDTH - outlineImg.width) / 2;
-  const boardY = 210;
+  const boardY = 208;
 
   gridXOffSet = boardX + (outlineImg.width - gridWidth) / 2;
   gridYOffSet = boardY + (outlineImg.height - gridWidth) / 2;
+
+  outlineW = outlineImg.width;
 }
 
 function getGridOffsets() {
@@ -25,6 +28,18 @@ function getGridOffsets() {
 
 function drawGrid(ctx) {
   const tile = spriteMap.board.tile;
+  const gridBg = spriteMap.board.bg;
+  ctx.drawImage(
+    gameState.gameSheet,
+    gridBg.sx,
+    gridBg.sy,
+    gridBg.sw,
+    gridBg.sh,
+    gridXOffSet - 15,
+    gridYOffSet - 20,
+    outlineW - 40,
+    outlineW - 40,
+  );
 
   for (let row = 0; row < GRID_SIZE; row++) {
     for (let column = 0; column < GRID_SIZE; column++) {

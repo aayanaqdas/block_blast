@@ -3,12 +3,13 @@ class GameState {
     this.canvas = null;
     this.ctx = null;
     this.spriteSheet = null;
+    this.gameSheet = null;
 
     this.GAME_WIDTH = 720;
     this.GAME_HEIGHT = 1280;
 
     this.GRID_SIZE = 8;
-    this.CELL_SIZE = 80;
+    this.CELL_SIZE = 81;
 
     this.gridData = Array.from({ length: 8 }, () => Array(8).fill(null));
     this.hand = [];
@@ -23,10 +24,11 @@ class GameState {
     this.isGameOver = false;
   }
 
-  init(canvas, ctx, spriteSheet) {
+  init(canvas, ctx, spriteSheet, gameSheet) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.spriteSheet = spriteSheet;
+    this.gameSheet = gameSheet;
   }
 }
 
