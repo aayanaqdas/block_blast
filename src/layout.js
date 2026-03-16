@@ -71,15 +71,21 @@ export function initLayout(imgs) {
   const digitHeight = 40;
   const digitWidth = 30;
 
+  layout.DIGIT_CONFIG = {
+    height: digitHeight,
+    spacing: 2,
+    widths: { default: digitWidth, narrow: digitWidth / 2 },
+  };
+
   layout.bestScoreDigits = {
-    x: layout.bestScoreBg.x + (layout.bestScoreBg.w - digitWidth) / 2,
+    x: layout.bestScoreBg.x + layout.bestScoreBg.w / 2,
     y: layout.bestScoreBg.y + (layout.bestScoreBg.h - digitHeight) / 2,
     w: digitWidth,
     h: digitHeight,
   };
 
   layout.scoreDigits = {
-    x: layout.scoreBg.x + (layout.scoreBg.w - digitWidth) / 2,
+    x: layout.scoreBg.x + layout.scoreBg.w / 2,
     y: layout.scoreBg.y + (layout.scoreBg.h - digitHeight) / 2,
     w: digitWidth,
     h: digitHeight,

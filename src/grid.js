@@ -1,6 +1,7 @@
 import { gameState } from "./gameStates.js";
 import { drawBlock } from "./blocks.js";
 import { spriteMap } from "./spriteMap.js";
+import { applyMoveScoring } from "./score.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GRID_SIZE = gameState.GRID_SIZE;
@@ -97,6 +98,17 @@ function isValidPlacement(grid, template, startRow, startCol) {
 
   return true;
 }
+function countBlocksInTemplate(template) {
+  let blocks = 0;
+  for (let r = 0; r < template.length; r++) {
+    for (let c = 0; c < template[r].length; c++) {
+      if (template[r][c] === 1) {
+        blocks++;
+      }
+    }
+  }
+  return blocks;
+}
 
 function placeOnGrid(template, startRow, startCol, color) {
   for (let shapeRow = 0; shapeRow < template.length; shapeRow++) {
@@ -109,33 +121,22 @@ function placeOnGrid(template, startRow, startCol, color) {
       }
     }
   }
+  const placedBlocks = countBlocksInTemplate(template);
   const linesCleared = clearFromGrid(gridData);
 
-  if (linesCleared > 0) {
-    gameState.movesSinceLastClear = 0;
-    if (gameState.lastMoveCleared || gameState.streak > 0) {
-      gameState.streak++;
-    } else {
-      gameState.streak = 1;
-    }
-    gameState.lastMoveCleared = true;
-
-    gameState.streakMultiplier = Math.min(gameState.streak, 10);
-    const points = linesCleared * 10 * gameState.streakMultiplier;
-    gameState.score += points;
-    console.log(
-      `Cleared ${linesCleared} lines. Streak: ${gameState.streak}x | +${points} pts. Total: ${gameState.score}`,
-    );
-  } else {
-    gameState.lastMoveCleared = false;
-    gameState.movesSinceLastClear++;
-
-    // 3 turns grace period before combo resets
-    if (gameState.movesSinceLastClear >= 3) {
-      gameState.streak = 0;
-      gameState.streakMultiplier = 1;
-    }
-  }
+  const scoreResult = applyMoveScoring(placedBlocks, linesCleared);
+  console.log(
+    "Placement +" +
+      scoreResult.placementPoints +
+      " | Lines: " +
+      scoreResult.linesCleared +
+      " | Clear +" +
+      scoreResult.clearPoints +
+      " | Combo x" +
+      scoreResult.comboMultiplier.toFixed(2) +
+      " | Total: " +
+      scoreResult.total,
+  );
 }
 
 function clearFromGrid(grid) {

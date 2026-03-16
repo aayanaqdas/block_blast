@@ -15,10 +15,12 @@ class GameState {
     this.hand = [];
     this.ghostPreview = null;
 
+    this.score = 0;
+    this.bestScore = parseInt(localStorage.getItem("blockBlastBestScore")) || 0;
+
     this.streak = 0;
     this.movesSinceLastClear = 0;
     this.lastMoveCleared = false;
-    this.score = 0;
     this.streakMultiplier = 1;
 
     this.isGameOver = false;
