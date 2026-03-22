@@ -6,6 +6,7 @@ export function initLayout(imgs) {
   const W = gameState.GAME_WIDTH;
   const H = gameState.GAME_HEIGHT;
   const cx = W / 2;
+  const cy = H / 2;
 
   layout.topBg = {
     x: cx - imgs.topBg.width / 2,
@@ -27,6 +28,11 @@ export function initLayout(imgs) {
   layout.plantBottom = {
     x: cx - imgs.plantBottom.width / 2,
     y: H - imgs.plantBottom.height,
+  };
+
+  layout.gameOverDialog = {
+    x: cx - imgs.gameOverDialog.width / 2,
+    y: cy - imgs.gameOverDialog.height / 2,
   };
 
   const bgHeight = 78;
@@ -89,5 +95,62 @@ export function initLayout(imgs) {
     y: layout.scoreBg.y + (layout.scoreBg.h - digitHeight) / 2,
     w: digitWidth,
     h: digitHeight,
+  };
+
+  const dialogTopY = layout.gameOverDialog.y;
+
+  layout.dialogGameOverText = {
+    x: cx,
+    y: dialogTopY + 200,
+  };
+
+  layout.dialogScoreText = {
+    x: cx,
+    y: layout.dialogGameOverText.y + 100,
+  };
+
+  layout.dialogScoreDigits = {
+    x: cx,
+    y: layout.dialogScoreText.y + 30,
+    w: digitWidth,
+    h: digitHeight,
+  };
+
+  layout.dialogBestText = {
+    x: cx,
+    y: layout.dialogScoreDigits.y + 80,
+  };
+
+  layout.dialogBestDigits = {
+    x: cx,
+    y: layout.dialogBestText.y + 50,
+    w: digitWidth,
+    h: digitHeight,
+  };
+
+  const newTrophySize = trophySize + 15;
+  layout.newBestTrophy = {
+    x: layout.dialogBestDigits.x - layout.dialogBestDigits.x / 2,
+    y: layout.dialogBestDigits.y + (layout.dialogBestDigits.h - newTrophySize) / 2,
+    w: newTrophySize,
+    h: newTrophySize,
+  };
+
+  layout.dialogNewGameBtn = {
+    x: cx,
+    y: layout.dialogBestDigits.y + 120,
+    h: 100,
+  };
+
+  layout.playIcon = {
+    x: cx + 15,
+    y: layout.dialogNewGameBtn.y - 15,
+    w: 40,
+    h: 40,
+  };
+
+  layout.shareBtn = {
+    x: cx,
+    y: layout.dialogNewGameBtn.y + 120,
   };
 }

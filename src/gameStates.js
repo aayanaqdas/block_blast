@@ -2,8 +2,8 @@ class GameState {
   constructor() {
     this.canvas = null;
     this.ctx = null;
-    this.spriteSheet = null;
-    this.gameSheet = null;
+    this.uiSheet = null;
+    this.uiGameSheet = null;
 
     this.GAME_WIDTH = 720;
     this.GAME_HEIGHT = 1280;
@@ -17,6 +17,7 @@ class GameState {
 
     this.score = 0;
     this.bestScore = parseInt(localStorage.getItem("blockBlastBestScore")) || 0;
+    this.isNewBest = false;
 
     this.streak = 0;
     this.movesSinceLastClear = 0;
@@ -26,11 +27,11 @@ class GameState {
     this.isGameOver = false;
   }
 
-  init(canvas, ctx, spriteSheet, gameSheet) {
+  init(canvas, ctx, uiSheet, uiGameSheet) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.spriteSheet = spriteSheet;
-    this.gameSheet = gameSheet;
+    this.spriteSheet = uiSheet;
+    this.uiGameSheet = uiGameSheet;
   }
 }
 

@@ -4,7 +4,18 @@ export const spriteMap = {
     bestScoreBg: { sx: 944, sy: 321, sw: 259, sh: 71 },
     optionsBtn: { sx: 1196, sy: 425, sw: 71, sh: 73 },
     trophy: { sx: 1284, sy: 427, sw: 55, sh: 61 },
+    playIcon: { sx: 33, sy: 692, sw: 68, sh: 68 },
+    redBtn: { sx: 31, sy: 961, sw: 125, sh: 349 },
   },
+
+  gameOverUI: {
+    gameOverText: { sx: 90, sy: 1099, sw: 59, sh: 424 },
+    scoreText: { sx: 451, sy: 1283, sw: 34, sh: 122 },
+    bestText: { sx: 644, sy: 1778, sw: 94, sh: 33 },
+    newBestTrophy: { sx: 131, sy: 489, sw: 259, sh: 291 },
+    shareBtn: { sx: 186, sy: 6, sw: 82, sh: 168 },
+  },
+
   board: {
     tile: { sx: 340, sy: 105, sw: 65, sh: 65 },
     tileOutline: { sx: 277, sy: 109, sw: 58, sh: 58 },
@@ -32,5 +43,5 @@ export const spriteMap = {
     7: { sx: 327, sy: 1, sw: 40, sh: 52 },
     8: { sx: 372, sy: 1, sw: 40, sh: 52 },
     9: { sx: 417, sy: 1, sw: 40, sh: 52 },
-  }
+  },
 };

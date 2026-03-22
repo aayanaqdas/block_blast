@@ -6,6 +6,7 @@ import { initHand, drawHand } from "./hand.js";
 import { drawGhost } from "./blocks.js";
 import { spriteMap } from "./spriteMap.js";
 import { drawScoring } from "./score.js";
+import { drawGameOverScreen } from "./gameOver.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -45,7 +46,7 @@ function gameLoop() {
 
   drawGhost(ctx);
   drawHand(ctx);
-
+  drawGameOverScreen(ctx);
   requestAnimationFrame(gameLoop);
 }
 

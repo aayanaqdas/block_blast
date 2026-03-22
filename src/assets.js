@@ -2,12 +2,14 @@ const assetPaths = {
   bg: "./images/bg_game.jpg",
   uiSheet: "./images/new_ui.png",
   uiGameSheet: "./images/ui_game.png",
+  uiTextSheet: "./images/common_ui.png",
   gridOutline: "./images/grid_outline.png",
   topBg: "./images/top_bg.png",
   bottomBg: "./images/touch_bg.png",
   plantTop: "./images/plant_top.png",
   plantBottom: "./images/plant_bottom.png",
   scoreDigits: "./images/num_score.png",
+  gameOverDialog: "./images/bg_dialog.png",
 };
 
 export const img = {};

@@ -393,28 +393,30 @@ function isPointInRect(clickX, clickY, x, y, width, height) {
 }
 
 function initDragControls() {
-  const { gridXOffSet, gridYOffSet} = getGridOffsets();
+  const { gridXOffSet, gridYOffSet } = getGridOffsets();
 
   gameState.canvas.addEventListener("pointerdown", (e) => {
-    const rect = gameState.canvas.getBoundingClientRect();
-    const clickX = ((e.clientX - rect.left) / rect.width) * GAME_WIDTH;
-    const clickY = ((e.clientY - rect.top) / rect.height) * GAME_HEIGHT;
+    if (!gameState.isGameOver) {
+      const rect = gameState.canvas.getBoundingClientRect();
+      const clickX = ((e.clientX - rect.left) / rect.width) * GAME_WIDTH;
+      const clickY = ((e.clientY - rect.top) / rect.height) * GAME_HEIGHT;
 
-    gameState.hand.forEach((shape) => {
-      const displayCellSize = CELL_SIZE * shape.scale;
-      const shapeWidth = shape.template[0].length * displayCellSize;
-      const shapeHeight = shape.template.length * displayCellSize;
-      const shapeLeft = shape.x - shapeWidth / 2;
-      const shapeTop = shape.y - shapeHeight / 2;
-      if (isPointInRect(clickX, clickY, shapeLeft, shapeTop, shapeWidth, shapeHeight)) {
-        shape.isDragging = true;
-        shape.dragOffsetX = clickX - shape.x;
-        shape.dragOffsetY = clickY - shape.y;
-        shape.scale = 1;
-        shape.x = clickX - shape.dragOffsetX;
-        shape.y = clickY - shape.dragOffsetY;
-      }
-    });
+      gameState.hand.forEach((shape) => {
+        const displayCellSize = CELL_SIZE * shape.scale;
+        const shapeWidth = shape.template[0].length * displayCellSize;
+        const shapeHeight = shape.template.length * displayCellSize;
+        const shapeLeft = shape.x - shapeWidth / 2;
+        const shapeTop = shape.y - shapeHeight / 2;
+        if (isPointInRect(clickX, clickY, shapeLeft, shapeTop, shapeWidth, shapeHeight)) {
+          shape.isDragging = true;
+          shape.dragOffsetX = clickX - shape.x;
+          shape.dragOffsetY = clickY - shape.y;
+          shape.scale = 1;
+          shape.x = clickX - shape.dragOffsetX;
+          shape.y = clickY - shape.dragOffsetY;
+        }
+      });
+    }
   });
 
   gameState.canvas.addEventListener("pointermove", (e) => {

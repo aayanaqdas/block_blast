@@ -1,6 +1,7 @@
 import { gameState } from "./gameStates.js";
 import { drawBlock } from "./blocks.js";
 import { spriteMap } from "./spriteMap.js";
+import { img } from "./assets.js";
 import { applyMoveScoring } from "./score.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
@@ -31,7 +32,7 @@ function drawGrid(ctx) {
   const tile = spriteMap.board.tile;
   const gridBg = spriteMap.board.bg;
   ctx.drawImage(
-    gameState.gameSheet,
+    img.uiGameSheet,
     gridBg.sx,
     gridBg.sy,
     gridBg.sw,
@@ -50,7 +51,7 @@ function drawGrid(ctx) {
       const colorKey = gridData[row][column];
 
       ctx.drawImage(
-        gameState.spriteSheet,
+        img.uiSheet,
         tile.sx,
         tile.sy,
         tile.sw,

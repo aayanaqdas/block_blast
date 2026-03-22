@@ -69,6 +69,7 @@ function applyMoveScoring(placedBlocks, linesCleared) {
   }
 
   if (gameState.score > gameState.bestScore) {
+    gameState.isNewBest = true;
     gameState.bestScore = gameState.score;
     localStorage.setItem("blockBlastBestScore", gameState.bestScore);
   }
@@ -213,4 +214,4 @@ function drawScoring(ctx) {
   );
 }
 
-export { drawScoring, applyMoveScoring };
+export { drawScoring, applyMoveScoring, drawScoreDigits };
