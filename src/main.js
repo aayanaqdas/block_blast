@@ -3,8 +3,8 @@ import { img, loadAssets } from "./assets.js";
 import { initLayout, layout } from "./layout.js";
 import { intiGrid, drawGrid } from "./grid.js";
 import { initHand, drawHand } from "./hand.js";
+import { initUIEvents } from "./uiEvents.js";
 import { drawGhost } from "./blocks.js";
-import { spriteMap } from "./spriteMap.js";
 import { drawScoring } from "./score.js";
 import { drawGameOverScreen } from "./gameOver.js";
 
@@ -55,6 +55,7 @@ function initGame() {
     gameState.init(canvas, ctx, img.uiSheet, img.uiGameSheet);
     initCanvas();
     initLayout(img);
+    initUIEvents();
     intiGrid(img.gridOutline);
     initHand();
     window.addEventListener("resize", initCanvas);

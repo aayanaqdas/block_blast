@@ -1,8 +1,14 @@
 import { gameState } from "./gameStates.js";
-import { placeOnGrid, isValidPlacement, clearFromGrid, calculateOpenSpace } from "./grid.js";
+import {
+  placeOnGrid,
+  isValidPlacement,
+  clearFromGrid,
+  calculateOpenSpace,
+  getGridOffsets,
+} from "./grid.js";
 import { drawBlock, BLOCK_COLORS } from "./blocks.js";
 import { SHAPES, CHUNKS, SPANNERS, FILLERS, HELPERS } from "./shapes.js";
-import { getGridOffsets } from "./grid.js";
+import { isPointInRect } from "./uiEvents.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
@@ -377,7 +383,7 @@ function removeFromHand(shape) {
     }
     if (!anyFits) {
       console.log("Game over! No remaining piece can fit");
-      gameState.isGameOver = true;
+      gameState.gameOver();
     }
   }
 }
@@ -388,15 +394,11 @@ function drawHand(ctx) {
   });
 }
 
-function isPointInRect(clickX, clickY, x, y, width, height) {
-  return clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height;
-}
-
 function initDragControls() {
   const { gridXOffSet, gridYOffSet } = getGridOffsets();
 
   gameState.canvas.addEventListener("pointerdown", (e) => {
-    if (!gameState.isGameOver) {
+    if (gameState.isPlaying()) {
       const rect = gameState.canvas.getBoundingClientRect();
       const clickX = ((e.clientX - rect.left) / rect.width) * GAME_WIDTH;
       const clickY = ((e.clientY - rect.top) / rect.height) * GAME_HEIGHT;
@@ -481,4 +483,4 @@ function initHand() {
   initDragControls();
 }
 
-export { initHand, drawHand };
+export { initHand, drawHand, createHand };

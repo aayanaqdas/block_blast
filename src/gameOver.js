@@ -13,7 +13,7 @@ const shareBtn = spriteMap.gameOverUI.shareBtn;
 const newBestTrophy = spriteMap.gameOverUI.newBestTrophy;
 
 function drawGameOverScreen(ctx) {
-  if (!gameState.isGameOver) return;
+  if (!gameState.isGameOver()) return;
   ctx.save();
   ctx.globalAlpha = 0.8;
   ctx.fillStyle = "black";
