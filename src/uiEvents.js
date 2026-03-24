@@ -9,7 +9,6 @@ const createButton = (onClick, config = {}) => ({
   baseY: 0,
   w: config.width,
   h: config.height,
-  pressed: false,
   onClick,
 });
 
@@ -89,20 +88,18 @@ function isButtonClicked(btn, clickX, clickY) {
   return isPointInRect(clickX, clickY, btn.x, btn.y, btn.w, btn.h);
 }
 
-function pressButton(btn) {
-  btn.pressed = true;
-  btn.y = btn.baseY + 2;
+function pressButton(layoutObj, action) {
+  layoutObj.y += 2;
 
   setTimeout(() => {
-    btn.pressed = false;
-    btn.y = btn.baseY;
+    layoutObj.y -= 2;
+    action();
   }, 100);
 }
 const STATE_CLICK_HANDLERS = {
   PLAYING: (clickX, clickY) => {
     if (isButtonClicked(BUTTONS.options, clickX, clickY)) {
-      pressButton(BUTTONS.options);
-      BUTTONS.options.onClick();
+      pressButton(layout.optionsBtn, BUTTONS.options.onClick);
       return true;
     }
     return false;
@@ -110,12 +107,10 @@ const STATE_CLICK_HANDLERS = {
 
   GAME_OVER: (clickX, clickY) => {
     if (isButtonClicked(BUTTONS.newGame, clickX, clickY)) {
-      pressButton(BUTTONS.newGame);
-      BUTTONS.newGame.onClick();
+      pressButton(layout.dialogNewGameBtn, BUTTONS.newGame.onClick);
       return true;
     } else if (isButtonClicked(BUTTONS.share, clickX, clickY)) {
-      pressButton(BUTTONS.share);
-      BUTTONS.share.onClick();
+      pressButton(layout.shareBtn, BUTTONS.share.onClick);
       return true;
     }
     return false;

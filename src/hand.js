@@ -396,6 +396,7 @@ function drawHand(ctx) {
 
 function initDragControls() {
   const { gridXOffSet, gridYOffSet } = getGridOffsets();
+  const hitBoxPadding = 60;
 
   gameState.canvas.addEventListener("pointerdown", (e) => {
     if (gameState.isPlaying()) {
@@ -409,7 +410,16 @@ function initDragControls() {
         const shapeHeight = shape.template.length * displayCellSize;
         const shapeLeft = shape.x - shapeWidth / 2;
         const shapeTop = shape.y - shapeHeight / 2;
-        if (isPointInRect(clickX, clickY, shapeLeft, shapeTop, shapeWidth, shapeHeight)) {
+        if (
+          isPointInRect(
+            clickX,
+            clickY,
+            shapeLeft - hitBoxPadding,
+            shapeTop - hitBoxPadding,
+            shapeWidth + hitBoxPadding * 2,
+            shapeHeight + hitBoxPadding * 2,
+          )
+        ) {
           shape.isDragging = true;
           shape.dragOffsetX = clickX - shape.x;
           shape.dragOffsetY = clickY - shape.y;
