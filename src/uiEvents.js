@@ -123,7 +123,7 @@ function handleCanvasClick(e) {
   const clickY = ((e.clientY - rect.top) / rect.height) * gameState.GAME_HEIGHT;
 
   const handler = STATE_CLICK_HANDLERS[gameState.currentState];
-  console.log(gameState.currentState);
+
   if (handler) {
     handler(clickX, clickY);
   }

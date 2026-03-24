@@ -115,9 +115,9 @@ function scorePlacementAt(grid, template, colorKey, r, c) {
   }
 
   const resultGrid = simGrid.map((row) => [...row]);
-  clearFromGrid(resultGrid);
+  const clearInfo = clearFromGrid(resultGrid);
 
-  return { grid: resultGrid, linesCleared, setupValue };
+  return { grid: resultGrid, linesCleared: clearInfo.linesCleared, setupValue };
 }
 
 function findBestPlacement(grid, template, colorKey) {

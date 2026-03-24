@@ -3,6 +3,7 @@ import { drawBlock } from "./blocks.js";
 import { spriteMap } from "./spriteMap.js";
 import { img } from "./assets.js";
 import { applyMoveScoring } from "./score.js";
+import { spawnJewels } from "./particles.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GRID_SIZE = gameState.GRID_SIZE;
@@ -50,17 +51,7 @@ function drawGrid(ctx) {
 
       const colorKey = gridData[row][column];
 
-      ctx.drawImage(
-        img.uiSheet,
-        tile.sx,
-        tile.sy,
-        tile.sw,
-        tile.sh,
-        x,
-        y,
-        CELL_SIZE,
-        CELL_SIZE,
-      );
+      ctx.drawImage(img.uiSheet, tile.sx, tile.sy, tile.sw, tile.sh, x, y, CELL_SIZE, CELL_SIZE);
 
       if (colorKey !== null) {
         drawBlock(ctx, x, y, colorKey, 1);
@@ -123,7 +114,11 @@ function placeOnGrid(template, startRow, startCol, color) {
     }
   }
   const placedBlocks = countBlocksInTemplate(template);
-  const linesCleared = clearFromGrid(gridData);
+  const { linesCleared, clearedCells } = clearFromGrid(gridData);
+
+  if (clearedCells.length > 0) {
+    spawnJewels(clearedCells, color);
+  }
 
   const scoreResult = applyMoveScoring(placedBlocks, linesCleared);
   console.log(
@@ -144,6 +139,7 @@ function clearFromGrid(grid) {
   const rowFull = [];
   const colFull = [];
   let linesCleared = 0;
+  const clearedCells = [];
 
   for (let i = 0; i < GRID_SIZE; i++) {
     rowFull[i] = grid[i].every((cell) => cell !== null);
@@ -155,12 +151,15 @@ function clearFromGrid(grid) {
   for (let r = 0; r < GRID_SIZE; r++) {
     for (let c = 0; c < GRID_SIZE; c++) {
       if (rowFull[r] || colFull[c]) {
+        if (grid[r][c] !== null) {
+          clearedCells.push({ row: r, col: c });
+        }
         grid[r][c] = null;
       }
     }
   }
 
-  return linesCleared;
+  return { linesCleared, clearedCells };
 }
 
 export {

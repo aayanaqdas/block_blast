@@ -22,6 +22,16 @@ export const spriteMap = {
     bg: { sx: 1342, sy: 388, sw: 65, sh: 65 },
   },
 
+  jewelParticles: {
+    cyan: { sx: 29, sy: 45, sw: 23, sh: 23 },
+    blue: { sx: 1, sy: 43, sw: 23, sh: 25 },
+    green: { sx: 57, sy: 6, sw: 23, sh: 25 },
+    yellow: { sx: 29, sy: 6, sw: 23, sh: 25 },
+    red: { sx: 2, sy: 7, sw: 23, sh: 23 },
+    purple: { sx: 57, sy: 44, sw: 23, sh: 25 },
+    pink: { sx: 86, sy: 6, sw: 23, sh: 25 },
+  },
+
   blocks: {
     cyan: { sx: 170, sy: 285, sw: 97, sh: 97 },
     blue: { sx: 268, sy: 367, sw: 97, sh: 97 },
