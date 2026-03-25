@@ -24,9 +24,14 @@ class GameState {
     this.hand = [];
     this.ghostPreview = null;
 
-    this.score = 0;
+    this.score = 90000;
     this.bestScore = parseInt(localStorage.getItem("blockBlastBestScore")) || 0;
+    this.displayScore = 0;
+    this.displayBestScore = this.bestScore;
     this.isNewBest = false;
+
+    this.gameOverDisplayScore = 0;
+    this.gameOverAnimProgress = 0;
 
     this.streak = 0;
     this.movesSinceLastClear = 0;
@@ -69,6 +74,9 @@ class GameState {
     }
     this.hand = [];
     this.score = 0;
+    this.displayScore = 0;
+    this.gameOverDisplayScore = 0;
+    this.gameOverAnimProgress = 0;
     this.isNewBest = false;
     this.streak = 0;
     this.movesSinceLastClear = 0;

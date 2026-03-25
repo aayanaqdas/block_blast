@@ -5,7 +5,7 @@ import { intiGrid, drawGrid } from "./grid.js";
 import { initHand, drawHand } from "./hand.js";
 import { initUIEvents } from "./uiEvents.js";
 import { drawGhost } from "./blocks.js";
-import { drawScoring } from "./score.js";
+import { updateAndDrawScoring } from "./score.js";
 import { drawGameOverScreen } from "./gameOver.js";
 import { updateAndDrawParticles } from "./particles.js";
 
@@ -37,7 +37,7 @@ function gameLoop() {
   ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
   ctx.drawImage(img.bg, 0, 0);
 
-  drawScoring(ctx);
+  updateAndDrawScoring(ctx);
 
   drawGrid(ctx);
   ctx.drawImage(img.gridOutline, layout.gridOutline.x, layout.gridOutline.y);

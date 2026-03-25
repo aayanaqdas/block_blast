@@ -130,7 +130,17 @@ function drawScoreDigits(ctx, score, centerX, y, h, minX = -Infinity) {
   }
 }
 
-function drawScoring(ctx) {
+function updateAndDrawScoring(ctx) {
+  if (gameState.displayScore < gameState.score) {
+    const diff = gameState.score - gameState.displayScore;
+    gameState.displayScore += Math.max(1, Math.floor(diff * 0.03));
+  }
+
+  if (gameState.displayBestScore < gameState.bestScore) {
+    const diffBest = gameState.bestScore - gameState.displayBestScore;
+    gameState.displayBestScore += Math.max(1, Math.floor(diffBest * 0.03));
+  }
+
   ctx.drawImage(img.topBg, layout.topBg.x, layout.topBg.y);
 
   ctx.drawImage(
@@ -199,7 +209,7 @@ function drawScoring(ctx) {
   const bestScoreMinX = layout.scoreTrophy.x + layout.scoreTrophy.w;
   drawScoreDigits(
     ctx,
-    gameState.bestScore,
+    gameState.displayBestScore,
     layout.bestScoreDigits.x,
     layout.bestScoreDigits.y,
     layout.bestScoreDigits.h,
@@ -207,11 +217,11 @@ function drawScoring(ctx) {
   );
   drawScoreDigits(
     ctx,
-    gameState.score,
+    gameState.displayScore,
     layout.scoreDigits.x,
     layout.scoreDigits.y,
     layout.scoreDigits.h,
   );
 }
 
-export { drawScoring, applyMoveScoring, drawScoreDigits };
+export { updateAndDrawScoring, applyMoveScoring, drawScoreDigits };

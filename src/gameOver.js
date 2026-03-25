@@ -14,11 +14,46 @@ const newBestTrophy = spriteMap.gameOverUI.newBestTrophy;
 
 function drawGameOverScreen(ctx) {
   if (!gameState.isGameOver()) return;
+
+  let animDone = true;
+  if (gameState.gameOverAnimProgress < 1) {
+    gameState.gameOverAnimProgress += 0.05;
+    if (gameState.gameOverAnimProgress > 1) {
+      gameState.gameOverAnimProgress = 1;
+    }
+
+    animDone = false;
+  }
+
+  let countingDone = true;
+  if (gameState.gameOverDisplayScore < gameState.score && animDone) {
+    const diff = gameState.score - gameState.gameOverDisplayScore;
+    gameState.gameOverDisplayScore += Math.max(1, Math.floor(diff * 0.08));
+    if (gameState.gameOverDisplayScore > gameState.score) {
+      gameState.gameOverDisplayScore = gameState.score;
+    }
+
+    countingDone = false;
+  }
+
+  const anim = gameState.gameOverAnimProgress;
+
+  const scale = 1 - Math.pow(1 - anim, 3);
+  const cx = gameState.GAME_WIDTH / 2;
+  const cy = gameState.GAME_HEIGHT / 2;
+
   ctx.save();
-  ctx.globalAlpha = 0.8;
+  ctx.globalAlpha = 0.8 * anim;
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, gameState.GAME_WIDTH, gameState.GAME_HEIGHT);
   ctx.restore();
+
+  ctx.save();
+  ctx.globalAlpha = anim;
+
+  ctx.translate(cx, cy);
+  ctx.scale(scale, scale);
+  ctx.translate(-cx, -cy);
 
   ctx.drawImage(img.gameOverDialog, layout.gameOverDialog.x, layout.gameOverDialog.y);
 
@@ -56,7 +91,7 @@ function drawGameOverScreen(ctx) {
 
   drawScoreDigits(
     ctx,
-    gameState.score,
+    gameState.gameOverDisplayScore,
     layout.dialogScoreDigits.x,
     layout.dialogScoreDigits.y,
     layout.dialogScoreDigits.h,
@@ -82,7 +117,7 @@ function drawGameOverScreen(ctx) {
     layout.dialogBestDigits.h,
   );
 
-  if (gameState.isNewBest) {
+  if (gameState.isNewBest && animDone && countingDone) {
     ctx.drawImage(
       img.uiSheet,
       newBestTrophy.sx,
@@ -142,6 +177,8 @@ function drawGameOverScreen(ctx) {
     shareBtn.sw,
     shareBtn.sh,
   );
+  ctx.restore();
+
   ctx.restore();
 }
 

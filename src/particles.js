@@ -15,7 +15,7 @@ class Particle {
     this.vx = (Math.random() - 0.5) * 12;
     this.vy = (Math.random() - 1) * 10;
 
-    this.life = 1.0;
+    this.life = 2.0;
     this.decay = 0.015 + Math.random() * 0.02;
 
     this.rotation = Math.random() * Math.PI * 2;
