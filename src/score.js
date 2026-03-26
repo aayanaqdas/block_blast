@@ -41,8 +41,10 @@ function getComboMultiplier(streak) {
 function applyMoveScoring(placedBlocks, linesCleared) {
   let placementPoints = Math.max(0, placedBlocks) * SCORING.PLACEMENT_POINTS;
   let clearPoints = 0;
+  let totalEarned = 0;
 
   gameState.score += placementPoints;
+  totalEarned += placementPoints;
 
   if (linesCleared > 0) {
     gameState.movesSinceLastClear = 0;
@@ -57,6 +59,7 @@ function applyMoveScoring(placedBlocks, linesCleared) {
     clearPoints = Math.round((lineBasePoints + multiLineBonus) * comboMultiplier);
 
     gameState.score += clearPoints;
+    totalEarned += clearPoints;
   } else {
     gameState.lastMoveCleared = false;
     gameState.movesSinceLastClear += 1;
@@ -78,6 +81,7 @@ function applyMoveScoring(placedBlocks, linesCleared) {
     placementPoints,
     clearPoints,
     linesCleared,
+    totalEarned,
     streak: gameState.streak,
     comboMultiplier: gameState.streakMultiplier,
     total: gameState.score,

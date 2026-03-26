@@ -8,6 +8,7 @@ import { drawGhost } from "./blocks.js";
 import { updateAndDrawScoring } from "./score.js";
 import { drawGameOverScreen } from "./gameOver.js";
 import { updateAndDrawParticles } from "./particles.js";
+import { updateAndDrawFloatingTexts } from "./floatingText.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -49,6 +50,7 @@ function gameLoop() {
   drawHand(ctx);
   drawGameOverScreen(ctx);
   updateAndDrawParticles(ctx);
+  updateAndDrawFloatingTexts(ctx)
   requestAnimationFrame(gameLoop);
 }
 

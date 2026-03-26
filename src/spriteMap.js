@@ -6,6 +6,10 @@ export const spriteMap = {
     trophy: { sx: 1284, sy: 427, sw: 55, sh: 61 },
     playIcon: { sx: 33, sy: 692, sw: 68, sh: 68 },
     redBtn: { sx: 31, sy: 961, sw: 125, sh: 349 },
+    textGood: { sx: 940, sy: 245, sw: 298, sh: 73 },
+    textGreat: { sx: 1034, sy: 150, sw: 312, sh: 73 },
+    textAmazing: { sx: 531, sy: 125, sw: 460, sh: 92 },
+    textPerfect: { sx: 1077, sy: 18, sw: 395, sh: 92 },
   },
 
   gameOverUI: {

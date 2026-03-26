@@ -24,7 +24,7 @@ class GameState {
     this.hand = [];
     this.ghostPreview = null;
 
-    this.score = 90000;
+    this.score = 0;
     this.bestScore = parseInt(localStorage.getItem("blockBlastBestScore")) || 0;
     this.displayScore = 0;
     this.displayBestScore = this.bestScore;
@@ -37,6 +37,8 @@ class GameState {
     this.movesSinceLastClear = 0;
     this.lastMoveCleared = false;
     this.streakMultiplier = 1;
+    this.floatingTexts = [];
+    this.lastComboSprite = null;
   }
 
   init(canvas, ctx, uiSheet, uiGameSheet) {

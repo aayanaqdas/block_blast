@@ -4,6 +4,7 @@ import { spriteMap } from "./spriteMap.js";
 import { img } from "./assets.js";
 import { applyMoveScoring } from "./score.js";
 import { spawnJewels } from "./particles.js";
+import { addFloatingScore, addFloatingComboText } from "./floatingText.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GRID_SIZE = gameState.GRID_SIZE;
@@ -121,6 +122,15 @@ function placeOnGrid(template, startRow, startCol, color) {
   }
 
   const scoreResult = applyMoveScoring(placedBlocks, linesCleared);
+  const dropX = gridXOffSet + (startCol * CELL_SIZE) + ((template[0].length * CELL_SIZE) / 2)
+  const dropY = gridYOffSet + (startRow *CELL_SIZE);
+
+  addFloatingScore(scoreResult.totalEarned, dropX, dropY)
+
+  if(linesCleared > 0) {
+    addFloatingComboText(linesCleared, scoreResult.comboMultiplier);
+  }
+
   console.log(
     "Placement +" +
       scoreResult.placementPoints +
