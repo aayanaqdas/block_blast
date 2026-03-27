@@ -118,19 +118,19 @@ function placeOnGrid(template, startRow, startCol, color) {
   const placedBlocks = countBlocksInTemplate(template);
   const { linesCleared, clearedCells } = clearFromGrid(gridData);
 
-  playSound("blockPlace")
+  playSound("blockPlace");
 
   if (clearedCells.length > 0) {
     spawnJewels(clearedCells, color);
   }
 
   const scoreResult = applyMoveScoring(placedBlocks, linesCleared);
-  const dropX = gridXOffSet + (startCol * CELL_SIZE) + ((template[0].length * CELL_SIZE) / 2)
-  const dropY = gridYOffSet + (startRow *CELL_SIZE);
+  const dropX = gridXOffSet + startCol * CELL_SIZE + (template[0].length * CELL_SIZE) / 2;
+  const dropY = gridYOffSet + startRow * CELL_SIZE;
 
-  addFloatingScore(scoreResult.totalEarned, dropX, dropY)
+  addFloatingScore(scoreResult.totalEarned, dropX, dropY);
 
-  if(linesCleared > 0) {
+  if (linesCleared > 0) {
     addFloatingComboText(linesCleared, scoreResult.comboMultiplier);
   }
 }
@@ -152,7 +152,7 @@ function clearFromGrid(grid) {
     for (let c = 0; c < GRID_SIZE; c++) {
       if (rowFull[r] || colFull[c]) {
         if (grid[r][c] !== null) {
-          clearedCells.push({ row: r, col: c});
+          clearedCells.push({ row: r, col: c });
         }
         grid[r][c] = null;
       }
@@ -161,6 +161,7 @@ function clearFromGrid(grid) {
 
   return { linesCleared, clearedCells };
 }
+
 
 export {
   intiGrid,

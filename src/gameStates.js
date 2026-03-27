@@ -35,6 +35,11 @@ class GameState {
     this.gameOverDisplayScore = 0;
     this.gameOverAnimProgress = 0;
 
+    this.silveringRow = 0;
+    this.silveringCol = 0;
+    this.silveringActive = false;
+    this.silveringDone = false;
+
     this.streak = 0;
     this.movesSinceLastClear = 0;
     this.lastMoveCleared = false;
@@ -68,7 +73,12 @@ class GameState {
 
   gameOver() {
     this.setState(GameStates.GAME_OVER);
-      playSound("over");
+    playSound("over");
+
+    this.silveringRow = 0;
+    this.silveringCol = 0;
+    this.silveringActive = true;
+    this.silveringDone = false;
   }
 
   reset() {

@@ -44,6 +44,7 @@ export const spriteMap = {
     red: { sx: 397, sy: 563, sw: 97, sh: 97 },
     purple: { sx: 350, sy: 269, sw: 97, sh: 97 },
     pink: { sx: 170, sy: 383, sw: 97, sh: 97 },
+    silver: { sx: 350, sy: 171, sw: 97, sh: 97 },
   },
 
   digits: {

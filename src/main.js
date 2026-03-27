@@ -7,7 +7,7 @@ import { initHand, drawHand } from "./hand.js";
 import { initUIEvents } from "./uiEvents.js";
 import { drawGhost } from "./blocks.js";
 import { updateAndDrawScoring } from "./score.js";
-import { drawGameOverScreen } from "./gameOver.js";
+import { drawGameOverScreen, updateSilvering } from "./gameOver.js";
 import { updateAndDrawParticles } from "./particles.js";
 import { updateAndDrawFloatingTexts } from "./floatingText.js";
 
@@ -51,7 +51,10 @@ function gameLoop() {
   drawHand(ctx);
   updateAndDrawParticles(ctx);
   updateAndDrawFloatingTexts(ctx)
-  drawGameOverScreen(ctx);
+  updateSilvering();
+  if(gameState.isGameOver() && gameState.silveringDone) {
+    drawGameOverScreen(ctx);
+  }
   requestAnimationFrame(gameLoop);
 }
 

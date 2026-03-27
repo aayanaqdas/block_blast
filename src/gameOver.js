@@ -15,6 +15,29 @@ const newBestTrophy = spriteMap.gameOverUI.newBestTrophy;
 
 let newBestSoundPlayed = false;
 
+function updateSilvering() {
+  if (!gameState.silveringActive || gameState.silveringDone) return;
+
+  const r = gameState.silveringRow;
+  const c = gameState.silveringCol;
+
+  if (gameState.gridData[r][c] !== null) {
+    gameState.gridData[r][c] = "silver";
+  }
+
+  gameState.silveringCol++;
+
+  if (gameState.silveringCol >= gameState.GRID_SIZE) {
+    gameState.silveringCol = 0;
+    gameState.silveringRow++;
+  }
+
+  if (gameState.silveringRow >= gameState.GRID_SIZE) {
+    gameState.silveringActive = false;
+    gameState.silveringDone = true;
+  }
+}
+
 function drawGameOverScreen(ctx) {
   if (!gameState.isGameOver()) {
     newBestSoundPlayed = false;
@@ -122,7 +145,7 @@ function drawGameOverScreen(ctx) {
   );
 
   if (gameState.isNewBest && animDone && countingDone) {
-    if(!newBestSoundPlayed) {
+    if (!newBestSoundPlayed) {
       playSound("newBest");
       newBestSoundPlayed = true;
     }
@@ -190,4 +213,4 @@ function drawGameOverScreen(ctx) {
   ctx.restore();
 }
 
-export { drawGameOverScreen };
+export { drawGameOverScreen, updateSilvering };
