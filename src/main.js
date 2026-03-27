@@ -2,7 +2,7 @@ import { gameState } from "./gameStates.js";
 import { img, loadAssets } from "./assets.js";
 import { preloadAllAudio, initAudioUnlock } from "./audio.js";
 import { initLayout, layout } from "./layout.js";
-import { intiGrid, drawGrid } from "./grid.js";
+import { intiGrid, drawGrid, updateFillGridAnim } from "./grid.js";
 import { initHand, drawHand } from "./hand.js";
 import { initUIEvents } from "./uiEvents.js";
 import { drawGhost } from "./blocks.js";
@@ -41,6 +41,9 @@ function gameLoop() {
 
   updateAndDrawScoring(ctx);
 
+  if (gameState.isStartAnim()) {
+    updateFillGridAnim();
+  }
   drawGrid(ctx);
   ctx.drawImage(img.gridOutline, layout.gridOutline.x, layout.gridOutline.y);
   ctx.drawImage(img.bottomBg, layout.bottomBg.x, layout.bottomBg.y);
@@ -50,9 +53,9 @@ function gameLoop() {
   drawGhost(ctx);
   drawHand(ctx);
   updateAndDrawParticles(ctx);
-  updateAndDrawFloatingTexts(ctx)
+  updateAndDrawFloatingTexts(ctx);
   updateSilvering();
-  if(gameState.isGameOver() && gameState.silveringDone) {
+  if (gameState.isGameOver() && gameState.silveringDone) {
     drawGameOverScreen(ctx);
   }
   requestAnimationFrame(gameLoop);

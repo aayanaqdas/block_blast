@@ -15,6 +15,7 @@ const soundPaths = {
   click: "./audio/click.mp3",
   over: "./audio/over.mp3",
   newBest: "./audio/newRecord.mp3",
+  scoreUpdate: "./audio/scoreUpdate.mp3"
 };
 
 let isUnlocked = false;

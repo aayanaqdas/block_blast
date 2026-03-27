@@ -2,6 +2,7 @@ import { playSound } from "./audio.js";
 
 export const GameStates = {
   MENU: "MENU",
+  START_ANIM: "START_ANIM",
   PLAYING: "PLAYING",
   OPTIONS: "OPTIONS",
   GAME_OVER: "GAME_OVER",
@@ -9,7 +10,7 @@ export const GameStates = {
 
 class GameState {
   constructor() {
-    this.currentState = GameStates.PLAYING;
+    this.currentState = GameStates.START_ANIM;
 
     this.canvas = null;
     this.ctx = null;
@@ -32,6 +33,9 @@ class GameState {
     this.displayBestScore = this.bestScore;
     this.isNewBest = false;
 
+    this.animPhase = "filling";
+    this.animRow = 0;
+
     this.gameOverDisplayScore = 0;
     this.gameOverAnimProgress = 0;
 
@@ -53,6 +57,10 @@ class GameState {
     this.ctx = ctx;
     this.spriteSheet = uiSheet;
     this.uiGameSheet = uiGameSheet;
+  }
+
+  isStartAnim(){
+    return this.currentState === GameStates.START_ANIM;
   }
 
   isPlaying() {
@@ -97,7 +105,9 @@ class GameState {
     this.movesSinceLastClear = 0;
     this.lastMoveCleared = false;
     this.streakMultiplier = 1;
-    this.setState(GameStates.PLAYING);
+    this.animRow = 0;
+    this.animPhase = "filling";
+    this.setState(GameStates.START_ANIM);
   }
 }
 

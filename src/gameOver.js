@@ -13,6 +13,7 @@ const playIcon = spriteMap.gameUI.playIcon;
 const shareBtn = spriteMap.gameOverUI.shareBtn;
 const newBestTrophy = spriteMap.gameOverUI.newBestTrophy;
 
+let scoreSoundPlayed = false;
 let newBestSoundPlayed = false;
 
 function updateSilvering() {
@@ -36,13 +37,14 @@ function updateSilvering() {
     gameState.silveringActive = false;
     gameState.silveringDone = true;
   }
+
+  newBestSoundPlayed = false;
+  scoreSoundPlayed = false;
 }
 
 function drawGameOverScreen(ctx) {
-  if (!gameState.isGameOver()) {
-    newBestSoundPlayed = false;
-    return;
-  }
+  if (!gameState.isGameOver()) return;
+
   let animDone = true;
   if (gameState.gameOverAnimProgress < 1) {
     gameState.gameOverAnimProgress += 0.05;
@@ -61,6 +63,11 @@ function drawGameOverScreen(ctx) {
       gameState.gameOverDisplayScore = gameState.score;
     }
     countingDone = false;
+  }
+
+  if(!countingDone && !scoreSoundPlayed) {
+    playSound("scoreUpdate")
+    scoreSoundPlayed = true;
   }
 
   const anim = gameState.gameOverAnimProgress;

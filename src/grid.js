@@ -1,5 +1,5 @@
 import { gameState } from "./gameStates.js";
-import { drawBlock } from "./blocks.js";
+import { drawBlock, BLOCK_COLORS } from "./blocks.js";
 import { spriteMap } from "./spriteMap.js";
 import { img } from "./assets.js";
 import { applyMoveScoring } from "./score.js";
@@ -162,6 +162,43 @@ function clearFromGrid(grid) {
   return { linesCleared, clearedCells };
 }
 
+let animTimer = 0;
+const ANIM_SPEED = 3;
+let isStartSoundPlayed = false;
+
+function updateFillGridAnim() {
+  if (!gameState.isStartAnim()) return;
+  if (!isStartSoundPlayed) {
+    playSound("newGame");
+    isStartSoundPlayed = true;
+  }
+
+  animTimer++;
+  if (animTimer % ANIM_SPEED !== 0) return;
+
+  for (let col = 0; col < GRID_SIZE; col++) {
+    if (gameState.animPhase === "filling") {
+      const randomColor = BLOCK_COLORS[Math.floor(Math.random() * BLOCK_COLORS.length)];
+      gridData[gameState.animRow][col] = randomColor;
+    } else {
+      gridData[gameState.animRow][col] = null;
+    }
+  }
+
+  gameState.animRow++;
+
+  if (gameState.animRow >= GRID_SIZE) {
+    gameState.animRow = 0;
+
+    if (gameState.animPhase === "filling") {
+      gameState.animPhase = "clearing";
+    } else {
+      gameState.animPhase = "filling";
+      gameState.startGame();
+      isStartSoundPlayed = false;
+    }
+  }
+}
 
 export {
   intiGrid,
@@ -171,4 +208,5 @@ export {
   isValidPlacement,
   clearFromGrid,
   calculateOpenSpace,
+  updateFillGridAnim,
 };
