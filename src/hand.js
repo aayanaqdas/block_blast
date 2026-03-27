@@ -9,6 +9,7 @@ import {
 import { drawBlock, BLOCK_COLORS } from "./blocks.js";
 import { SHAPES, CHUNKS, SPANNERS, FILLERS, HELPERS } from "./shapes.js";
 import { isPointInRect } from "./uiEvents.js";
+import { playSound } from "./audio.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GAME_HEIGHT = gameState.GAME_HEIGHT;
@@ -354,6 +355,7 @@ function createHand() {
     // console.log(
     //   `Hand: [${pick.names.join(", ")}] | clears: ${pick.clears}, setup: ${pick.setup.toFixed(0)}, blocks: ${pick.totalBlocks}, score: ${pick.score.toFixed(1)} | fill: ${(fillPercent * 100).toFixed(0)}% | near-clear: ${nearClearCount} | candidates: ${candidates.length}`,
     // );
+    playSound("blockNew");
     return;
   }
 
@@ -420,6 +422,7 @@ function initDragControls() {
             shapeHeight + hitBoxPadding * 2,
           )
         ) {
+          playSound("blockNew");
           shape.isDragging = true;
           shape.dragOffsetX = clickX - shape.x;
           shape.dragOffsetY = clickY - shape.y;
@@ -479,6 +482,8 @@ function initDragControls() {
         if (isValidPlacement(gameState.gridData, shape.template, gridRow, gridCol)) {
           placeOnGrid(shape.template, gridRow, gridCol, shape.colorKey);
           removeFromHand(shape);
+        } else {
+          playSound("blockWrong");
         }
       }
       gameState.ghostPreview = null;

@@ -2,9 +2,39 @@ import { gameState } from "./gameStates.js";
 import { getGridOffsets } from "./grid.js";
 import { spriteMap } from "./spriteMap.js";
 import { img } from "./assets.js";
+import { playSound } from "./audio.js";
+import { drawBlock } from "./blocks.js";
 
 const particles = [];
+const pendingExplosions = [];
 const GRAVITY = 0.5;
+
+class PendingExplosion {
+  constructor(cell, delay, colorKey) {
+    this.cell = cell;
+    this.delay = delay;
+    this.colorKey = colorKey;
+  }
+
+  update() {
+    this.delay--;
+    if (this.delay <= 0) {
+      spawnJewelsAt(this.cell, this.colorKey);
+      playSound("blockExplode");
+    }
+  }
+
+  draw(ctx) {
+    if (this.delay > 0) {
+      const { gridXOffSet, gridYOffSet } = getGridOffsets();
+      const CELL_SIZE = gameState.CELL_SIZE;
+      const x = gridXOffSet + this.cell.col * CELL_SIZE;
+      const y = gridYOffSet + this.cell.row * CELL_SIZE;
+
+      drawBlock(ctx, x, y, this.colorKey, 1);
+    }
+  }
+}
 
 class Particle {
   constructor(x, y, colorKey) {
@@ -64,21 +94,41 @@ class Particle {
 }
 
 function spawnJewels(clearedCells, colorKey) {
-  const { gridXOffSet, gridYOffSet } = getGridOffsets();
-  const CELL_SIZE = gameState.CELL_SIZE;
+  clearedCells.sort((a, b) => a.row - b.row || a.col - b.col);
+
+  let currentDelay = 0;
+  const DELAY_STEP = 2;
 
   clearedCells.forEach((cell) => {
-    const pixelX = gridXOffSet + cell.col * CELL_SIZE + CELL_SIZE / 2;
-    const pixelY = gridYOffSet + cell.row * CELL_SIZE + CELL_SIZE / 2;
-
-    const count = 4 + Math.floor(Math.random() * 3);
-    for (let i = 0; i < count; i++) {
-      particles.push(new Particle(pixelX, pixelY, colorKey));
-    }
+    pendingExplosions.push(new PendingExplosion(cell, currentDelay, colorKey));
+    currentDelay += DELAY_STEP;
   });
 }
 
+function spawnJewelsAt(cell, colorKey) {
+  const { gridXOffSet, gridYOffSet } = getGridOffsets();
+  const CELL_SIZE = gameState.CELL_SIZE;
+
+  const pixelX = gridXOffSet + cell.col * CELL_SIZE + CELL_SIZE / 2;
+  const pixelY = gridYOffSet + cell.row * CELL_SIZE + CELL_SIZE / 2;
+
+  const count = 4 + Math.floor(Math.random() * 3);
+  for (let i = 0; i < count; i++) {
+    particles.push(new Particle(pixelX, pixelY, colorKey));
+  }
+}
+
 function updateAndDrawParticles(ctx) {
+  for (let i = pendingExplosions.length - 1; i >= 0; i--) {
+    const p = pendingExplosions[i];
+    p.update();
+    if (p.delay <= 0) {
+      pendingExplosions.splice(i, 1);
+    } else {
+      p.draw(ctx);
+    }
+  }
+
   if (particles.length === 0) return;
 
   for (let i = particles.length - 1; i >= 0; i--) {
@@ -92,4 +142,4 @@ function updateAndDrawParticles(ctx) {
   }
 }
 
-export { spawnJewels, updateAndDrawParticles };
+export { spawnJewels, spawnJewelsAt, updateAndDrawParticles };

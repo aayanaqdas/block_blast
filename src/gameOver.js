@@ -3,6 +3,7 @@ import { img } from "./assets.js";
 import { layout } from "./layout.js";
 import { spriteMap } from "./spriteMap.js";
 import { drawScoreDigits } from "./score.js";
+import { playSound } from "./audio.js";
 
 const gameOverText = spriteMap.gameOverUI.gameOverText;
 const scoreText = spriteMap.gameOverUI.scoreText;
@@ -12,9 +13,13 @@ const playIcon = spriteMap.gameUI.playIcon;
 const shareBtn = spriteMap.gameOverUI.shareBtn;
 const newBestTrophy = spriteMap.gameOverUI.newBestTrophy;
 
-function drawGameOverScreen(ctx) {
-  if (!gameState.isGameOver()) return;
+let newBestSoundPlayed = false;
 
+function drawGameOverScreen(ctx) {
+  if (!gameState.isGameOver()) {
+    newBestSoundPlayed = false;
+    return;
+  }
   let animDone = true;
   if (gameState.gameOverAnimProgress < 1) {
     gameState.gameOverAnimProgress += 0.05;
@@ -32,7 +37,6 @@ function drawGameOverScreen(ctx) {
     if (gameState.gameOverDisplayScore > gameState.score) {
       gameState.gameOverDisplayScore = gameState.score;
     }
-
     countingDone = false;
   }
 
@@ -118,6 +122,10 @@ function drawGameOverScreen(ctx) {
   );
 
   if (gameState.isNewBest && animDone && countingDone) {
+    if(!newBestSoundPlayed) {
+      playSound("newBest");
+      newBestSoundPlayed = true;
+    }
     ctx.drawImage(
       img.uiSheet,
       newBestTrophy.sx,

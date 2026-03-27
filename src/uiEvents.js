@@ -2,6 +2,8 @@ import { gameState } from "./gameStates.js";
 import { layout } from "./layout.js";
 import { spriteMap } from "./spriteMap.js";
 import { createHand } from "./hand.js";
+import { playSound } from "./audio.js";
+
 
 const createButton = (onClick, config = {}) => ({
   x: 0,
@@ -90,7 +92,7 @@ function isButtonClicked(btn, clickX, clickY) {
 
 function pressButton(layoutObj, action) {
   layoutObj.y += 2;
-
+  playSound("click");
   setTimeout(() => {
     layoutObj.y -= 2;
     action();
@@ -106,6 +108,7 @@ const STATE_CLICK_HANDLERS = {
   },
 
   GAME_OVER: (clickX, clickY) => {
+    if(gameState.gameOverAnimProgress < 1) return false;
     if (isButtonClicked(BUTTONS.newGame, clickX, clickY)) {
       pressButton(layout.dialogNewGameBtn, BUTTONS.newGame.onClick);
       return true;

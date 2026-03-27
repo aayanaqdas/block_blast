@@ -3,8 +3,9 @@ import { drawBlock } from "./blocks.js";
 import { spriteMap } from "./spriteMap.js";
 import { img } from "./assets.js";
 import { applyMoveScoring } from "./score.js";
-import { spawnJewels } from "./particles.js";
+import { spawnJewels, spawnJewelsAt } from "./particles.js";
 import { addFloatingScore, addFloatingComboText } from "./floatingText.js";
+import { playSound } from "./audio.js";
 
 const GAME_WIDTH = gameState.GAME_WIDTH;
 const GRID_SIZE = gameState.GRID_SIZE;
@@ -117,6 +118,8 @@ function placeOnGrid(template, startRow, startCol, color) {
   const placedBlocks = countBlocksInTemplate(template);
   const { linesCleared, clearedCells } = clearFromGrid(gridData);
 
+  playSound("blockPlace")
+
   if (clearedCells.length > 0) {
     spawnJewels(clearedCells, color);
   }
@@ -130,19 +133,6 @@ function placeOnGrid(template, startRow, startCol, color) {
   if(linesCleared > 0) {
     addFloatingComboText(linesCleared, scoreResult.comboMultiplier);
   }
-
-  console.log(
-    "Placement +" +
-      scoreResult.placementPoints +
-      " | Lines: " +
-      scoreResult.linesCleared +
-      " | Clear +" +
-      scoreResult.clearPoints +
-      " | Combo x" +
-      scoreResult.comboMultiplier.toFixed(2) +
-      " | Total: " +
-      scoreResult.total,
-  );
 }
 
 function clearFromGrid(grid) {
@@ -162,7 +152,7 @@ function clearFromGrid(grid) {
     for (let c = 0; c < GRID_SIZE; c++) {
       if (rowFull[r] || colFull[c]) {
         if (grid[r][c] !== null) {
-          clearedCells.push({ row: r, col: c });
+          clearedCells.push({ row: r, col: c});
         }
         grid[r][c] = null;
       }

@@ -1,3 +1,5 @@
+import { playSound } from "./audio.js";
+
 export const GameStates = {
   MENU: "MENU",
   PLAYING: "PLAYING",
@@ -66,6 +68,7 @@ class GameState {
 
   gameOver() {
     this.setState(GameStates.GAME_OVER);
+      playSound("over");
   }
 
   reset() {

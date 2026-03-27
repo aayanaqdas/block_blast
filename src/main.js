@@ -1,5 +1,6 @@
 import { gameState } from "./gameStates.js";
 import { img, loadAssets } from "./assets.js";
+import { preloadAllAudio, initAudioUnlock } from "./audio.js";
 import { initLayout, layout } from "./layout.js";
 import { intiGrid, drawGrid } from "./grid.js";
 import { initHand, drawHand } from "./hand.js";
@@ -48,16 +49,18 @@ function gameLoop() {
 
   drawGhost(ctx);
   drawHand(ctx);
-  drawGameOverScreen(ctx);
   updateAndDrawParticles(ctx);
   updateAndDrawFloatingTexts(ctx)
+  drawGameOverScreen(ctx);
   requestAnimationFrame(gameLoop);
 }
 
 function initGame() {
-  loadAssets().then(() => {
+  loadAssets().then(async () => {
     gameState.init(canvas, ctx, img.uiSheet, img.uiGameSheet);
     initCanvas();
+    await preloadAllAudio();
+    initAudioUnlock();
     initLayout(img);
     initUIEvents();
     intiGrid(img.gridOutline);
