@@ -3,7 +3,7 @@ import { drawBlock } from "./blocks.js";
 import { spriteMap } from "./spriteMap.js";
 import { img } from "./assets.js";
 import { applyMoveScoring } from "./score.js";
-import { spawnJewels, spawnJewelsAt } from "./particles.js";
+import { spawnJewels } from "./particles.js";
 import { addFloatingScore, addFloatingComboText } from "./floatingText.js";
 import { playSound } from "./audio.js";
 

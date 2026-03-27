@@ -9,6 +9,8 @@ const particles = [];
 const pendingExplosions = [];
 const GRAVITY = 0.5;
 
+let isSoundPlayed = false;
+
 class PendingExplosion {
   constructor(cell, delay, colorKey) {
     this.cell = cell;
@@ -20,7 +22,10 @@ class PendingExplosion {
     this.delay--;
     if (this.delay <= 0) {
       spawnJewelsAt(this.cell, this.colorKey);
-      playSound("blockExplode");
+      if(!isSoundPlayed) {
+        playSound("blockExplode");
+        isSoundPlayed = true;
+      }
     }
   }
 
@@ -96,6 +101,7 @@ class Particle {
 function spawnJewels(clearedCells, colorKey) {
   clearedCells.sort((a, b) => a.row - b.row || a.col - b.col);
 
+  isSoundPlayed = false;
   let currentDelay = 0;
   const DELAY_STEP = 2;
 
