@@ -29,6 +29,16 @@ export function initLayout(imgs) {
     x: cx - imgs.plantBottom.width / 2,
     y: H - imgs.plantBottom.height,
   };
+  layout.logo = {
+    x: cx - imgs.logo.width / 2,
+    y: 100,
+  };
+
+  layout.startBtn = {
+    x: cx,
+    y: layout.plantBottom.y - 100,
+    h: 100,
+  };
 
   layout.gameOverDialog = {
     x: cx - imgs.gameOverDialog.width / 2,

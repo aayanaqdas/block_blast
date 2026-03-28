@@ -4,7 +4,6 @@ import { spriteMap } from "./spriteMap.js";
 import { createHand } from "./hand.js";
 import { playSound } from "./audio.js";
 
-
 const createButton = (onClick, config = {}) => ({
   x: 0,
   y: 0,
@@ -15,6 +14,11 @@ const createButton = (onClick, config = {}) => ({
 });
 
 const BUTTONS = {
+  start: createButton(() => {
+    console.log("Start clicked");
+    gameState.startAnim();
+  }),
+
   options: createButton(() => {
     console.log("Options clicked");
   }),
@@ -80,6 +84,15 @@ function positionButtons() {
     shareSprite.sh,
     shareSprite.sw,
   );
+
+  const startBtnSprite = spriteMap.gameUI.startBtn;
+  setButtonPosition(
+    BUTTONS.start,
+    layout.startBtn.x - startBtnSprite.sh / 2,
+    layout.startBtn.y - startBtnSprite.sw / 2,
+    startBtnSprite.sh,
+    startBtnSprite.sw,
+  );
 }
 
 function isPointInRect(clickX, clickY, x, y, width, height) {
@@ -99,6 +112,14 @@ function pressButton(layoutObj, action) {
   }, 100);
 }
 const STATE_CLICK_HANDLERS = {
+  MENU: (clickX, clickY) => {
+    if (isButtonClicked(BUTTONS.start, clickX, clickY)) {
+      pressButton(layout.startBtn, BUTTONS.start.onClick);
+      return true;
+    }
+    return false;
+  },
+
   PLAYING: (clickX, clickY) => {
     if (isButtonClicked(BUTTONS.options, clickX, clickY)) {
       pressButton(layout.optionsBtn, BUTTONS.options.onClick);
@@ -108,7 +129,7 @@ const STATE_CLICK_HANDLERS = {
   },
 
   GAME_OVER: (clickX, clickY) => {
-    if(gameState.gameOverAnimProgress < 1) return false;
+    if (gameState.gameOverAnimProgress < 1) return false;
     if (isButtonClicked(BUTTONS.newGame, clickX, clickY)) {
       pressButton(layout.dialogNewGameBtn, BUTTONS.newGame.onClick);
       return true;

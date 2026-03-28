@@ -10,7 +10,7 @@ export const GameStates = {
 
 class GameState {
   constructor() {
-    this.currentState = GameStates.START_ANIM;
+    this.currentState = GameStates.MENU;
 
     this.canvas = null;
     this.ctx = null;
@@ -59,6 +59,10 @@ class GameState {
     this.uiGameSheet = uiGameSheet;
   }
 
+  isMenu() {
+    return this.currentState === GameStates.MENU;
+  }
+
   isStartAnim(){
     return this.currentState === GameStates.START_ANIM;
   }
@@ -73,6 +77,10 @@ class GameState {
 
   setState(newState) {
     this.currentState = newState;
+  }
+
+  startAnim() {
+    this.setState(GameStates.START_ANIM);
   }
 
   startGame() {

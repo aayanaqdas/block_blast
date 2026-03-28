@@ -4,6 +4,7 @@ export const spriteMap = {
     bestScoreBg: { sx: 944, sy: 321, sw: 259, sh: 71 },
     optionsBtn: { sx: 1196, sy: 425, sw: 71, sh: 73 },
     trophy: { sx: 1284, sy: 427, sw: 55, sh: 61 },
+    startBtn: { sx: 8, sy: 493, sw: 115, sh: 447 },
     playIcon: { sx: 33, sy: 692, sw: 68, sh: 68 },
     redBtn: { sx: 31, sy: 961, sw: 125, sh: 349 },
     textGood: { sx: 940, sy: 245, sw: 298, sh: 73 },

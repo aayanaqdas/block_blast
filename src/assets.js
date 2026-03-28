@@ -1,5 +1,6 @@
 const assetPaths = {
   bg: "./images/bg_game.jpg",
+  logo: "./images/title.png",
   uiSheet: "./images/new_ui.png",
   uiGameSheet: "./images/ui_game.png",
   uiTextSheet: "./images/common_ui.png",

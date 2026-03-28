@@ -10,6 +10,7 @@ import { updateAndDrawScoring } from "./score.js";
 import { drawGameOverScreen, updateSilvering } from "./gameOver.js";
 import { updateAndDrawParticles } from "./particles.js";
 import { updateAndDrawFloatingTexts } from "./floatingText.js";
+import { spriteMap } from "./spriteMap.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -35,28 +36,58 @@ function initCanvas() {
   ctx.scale(dpr * scale, dpr * scale);
 }
 
+function drawMenu(ctx) {
+  if (!gameState.isMenu()) return;
+  const sb = spriteMap.gameUI.startBtn;
+  ctx.drawImage(img.plantTop, layout.plantTop.x, layout.plantTop.y);
+
+  ctx.drawImage(img.logo, layout.logo.x, layout.logo.y);
+  
+  ctx.save();
+  ctx.translate(layout.startBtn.x, layout.startBtn.y);
+  ctx.rotate(-Math.PI / 2);
+  ctx.drawImage(
+    img.uiSheet,
+    sb.sx,
+    sb.sy,
+    sb.sw,
+    sb.sh,
+    -sb.sw / 2,
+    -sb.sh / 2,
+    layout.startBtn.h,
+    sb.sh,
+  );
+  ctx.restore();
+
+  ctx.drawImage(img.plantBottom, layout.plantBottom.x, layout.plantBottom.y);
+}
+
 function gameLoop() {
   ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
   ctx.drawImage(img.bg, 0, 0);
 
-  updateAndDrawScoring(ctx);
+  drawMenu(ctx);
 
-  if (gameState.isStartAnim()) {
-    updateFillGridAnim();
-  }
-  drawGrid(ctx);
-  ctx.drawImage(img.gridOutline, layout.gridOutline.x, layout.gridOutline.y);
-  ctx.drawImage(img.bottomBg, layout.bottomBg.x, layout.bottomBg.y);
-  ctx.drawImage(img.plantTop, layout.plantTop.x, layout.plantTop.y);
-  ctx.drawImage(img.plantBottom, layout.plantBottom.x, layout.plantBottom.y);
+  if (!gameState.isMenu()) {
+    updateAndDrawScoring(ctx);
 
-  drawGhost(ctx);
-  drawHand(ctx);
-  updateAndDrawParticles(ctx);
-  updateAndDrawFloatingTexts(ctx);
-  updateSilvering();
-  if (gameState.isGameOver() && gameState.silveringDone) {
-    drawGameOverScreen(ctx);
+    if (gameState.isStartAnim()) {
+      updateFillGridAnim();
+    }
+    drawGrid(ctx);
+    ctx.drawImage(img.gridOutline, layout.gridOutline.x, layout.gridOutline.y);
+    ctx.drawImage(img.bottomBg, layout.bottomBg.x, layout.bottomBg.y);
+    ctx.drawImage(img.plantTop, layout.plantTop.x, layout.plantTop.y);
+    ctx.drawImage(img.plantBottom, layout.plantBottom.x, layout.plantBottom.y);
+
+    drawGhost(ctx);
+    drawHand(ctx);
+    updateAndDrawParticles(ctx);
+    updateAndDrawFloatingTexts(ctx);
+    updateSilvering();
+    if (gameState.isGameOver() && gameState.silveringDone) {
+      drawGameOverScreen(ctx);
+    }
   }
   requestAnimationFrame(gameLoop);
 }
