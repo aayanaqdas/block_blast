@@ -11,6 +11,7 @@ const assetPaths = {
   plantBottom: "./images/plant_bottom.png",
   scoreDigits: "./images/num_score.png",
   gameOverDialog: "./images/bg_dialog.png",
+  optionsDialog: "./images/bg_dialog_small.png",
   jewelSheet: "./images/jewels.png",
 };
 

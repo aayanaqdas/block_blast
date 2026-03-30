@@ -39,11 +39,74 @@ export function initLayout(imgs) {
     y: layout.plantBottom.y - 100,
     h: 100,
   };
-
   layout.gameOverDialog = {
     x: cx - imgs.gameOverDialog.width / 2,
     y: cy - imgs.gameOverDialog.height / 2,
   };
+
+
+  layout.optionsDialog = {
+    x: cx - imgs.optionsDialog.width / 2,
+    y: cy - imgs.optionsDialog.height / 2,
+  };
+
+  layout.optionsCloseBtn = {
+    x: imgs.optionsDialog.width + 74 / 2,
+    y: layout.optionsDialog.y,
+  };
+
+const optionsContentX = layout.optionsDialog.x + 80;
+const optionsStartY = layout.optionsDialog.y + 150;
+const lineSpacing = 100;
+const buttonW = 120;
+const buttonH = 70;
+const buttonX = imgs.optionsDialog.width - optionsContentX;
+
+layout.optionsSoundText = {
+  x: optionsContentX,
+  y: optionsStartY,
+  text: "Sound:" 
+},
+
+layout.optionsSoundBtn = {
+  x: buttonX,
+  y: layout.optionsSoundText.y - buttonH / 2,
+  w: buttonW,
+  h: buttonH
+}
+
+layout.optionsReplayText = {
+  x :optionsContentX,
+  y: optionsStartY + lineSpacing,
+  text: "Replay:" 
+},
+
+layout.optionsReplayBtn = {
+  x: buttonX,
+  y: layout.optionsReplayText.y - buttonH / 2,
+  w: buttonW,
+  h: buttonH
+}
+
+layout.optionsResetText = {
+  x :optionsContentX,
+  y: optionsStartY + lineSpacing * 2,
+  text: "Reset score:" 
+},
+
+layout.optionsResetBtn = {
+  x: buttonX,
+  y: layout.optionsResetText.y - buttonH / 2,
+  w: buttonW,
+  h: buttonH
+};
+
+layout.LABEL_STYLE = {
+  font: "bold 40px 'Fredoka', sans-serif",
+  color: "#8c726e",
+  shadowColor: "#383031",
+  shadowOffSet: 4
+}
 
   const bgHeight = 78;
   const bestScoreWidth = 266;

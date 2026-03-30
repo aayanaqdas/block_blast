@@ -38,11 +38,14 @@ class GameState {
 
     this.gameOverDisplayScore = 0;
     this.gameOverAnimProgress = 0;
+    this.optionsAnimProgress = 0;
 
     this.silveringRow = 0;
     this.silveringCol = 0;
     this.silveringActive = false;
     this.silveringDone = false;
+
+    this.isSoundOn = true;
 
     this.streak = 0;
     this.movesSinceLastClear = 0;
@@ -63,12 +66,16 @@ class GameState {
     return this.currentState === GameStates.MENU;
   }
 
-  isStartAnim(){
+  isStartAnim() {
     return this.currentState === GameStates.START_ANIM;
   }
 
   isPlaying() {
     return this.currentState === GameStates.PLAYING;
+  }
+
+  isOptions() {
+    return this.currentState === GameStates.OPTIONS;
   }
 
   isGameOver() {
@@ -87,6 +94,9 @@ class GameState {
     this.setState(GameStates.PLAYING);
   }
 
+  showOptions() {
+    this.setState(GameStates.OPTIONS);
+  }
   gameOver() {
     this.setState(GameStates.GAME_OVER);
     playSound("over");
@@ -105,7 +115,9 @@ class GameState {
     }
     this.hand = [];
     this.score = 0;
+    this.bestScore = parseInt(localStorage.getItem("blockBlastBestScore")) || 0;
     this.displayScore = 0;
+    this.displayBestScore = this.bestScore;
     this.gameOverDisplayScore = 0;
     this.gameOverAnimProgress = 0;
     this.isNewBest = false;

@@ -13,6 +13,14 @@ export const spriteMap = {
     textPerfect: { sx: 1077, sy: 18, sw: 395, sh: 92 },
   },
 
+  optionsUI: {
+    closeBtn: { sx: 401, sy: 665, sw: 74, sh: 72 },
+    soundOffBtn: { sx: 1066, sy: 403, sw: 115, sh: 75 },
+    soundOnBtn: { sx: 1245, sy: 249, sw: 115, sh: 75 },
+    replayBtn: { sx: 1214, sy: 337, sw: 115, sh: 75 },
+    resetBtn: { sx: 174, sy: 184, sw: 168, sh: 75 },
+  },
+
   gameOverUI: {
     gameOverText: { sx: 90, sy: 1099, sw: 59, sh: 424 },
     scoreText: { sx: 451, sy: 1283, sw: 34, sh: 122 },

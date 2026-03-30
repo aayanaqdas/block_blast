@@ -118,7 +118,7 @@ function spawnJewelsAt(cell, colorKey) {
   const pixelX = gridXOffSet + cell.col * CELL_SIZE + CELL_SIZE / 2;
   const pixelY = gridYOffSet + cell.row * CELL_SIZE + CELL_SIZE / 2;
 
-  const count = 4 + Math.floor(Math.random() * 3);
+  const count = 8 + Math.floor(Math.random() * 3);
   for (let i = 0; i < count; i++) {
     particles.push(new Particle(pixelX, pixelY, colorKey));
   }

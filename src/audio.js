@@ -15,7 +15,7 @@ const soundPaths = {
   click: "./audio/click.mp3",
   over: "./audio/over.mp3",
   newBest: "./audio/newRecord.mp3",
-  scoreUpdate: "./audio/scoreUpdate.mp3"
+  scoreUpdate: "./audio/scoreUpdate.mp3",
 };
 
 let isUnlocked = false;
@@ -32,15 +32,17 @@ async function preloadAllAudio() {
 }
 
 function playSound(name) {
-  audioCtx.resume();
+  if (gameState.isSoundOn) {
+    audioCtx.resume();
 
-  const buffer = soundBuffers[name];
+    const buffer = soundBuffers[name];
 
-  if (buffer) {
-    const source = audioCtx.createBufferSource();
-    source.buffer = buffer;
-    source.connect(audioCtx.destination);
-    source.start(0);
+    if (buffer) {
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audioCtx.destination);
+      source.start(0);
+    }
   }
 }
 

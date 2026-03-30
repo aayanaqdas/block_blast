@@ -8,6 +8,7 @@ import { initUIEvents } from "./uiEvents.js";
 import { drawGhost } from "./blocks.js";
 import { updateAndDrawScoring } from "./score.js";
 import { drawGameOverScreen, updateSilvering } from "./gameOver.js";
+import { drawOptionsDialog } from "./options.js";
 import { updateAndDrawParticles } from "./particles.js";
 import { updateAndDrawFloatingTexts } from "./floatingText.js";
 import { spriteMap } from "./spriteMap.js";
@@ -42,7 +43,7 @@ function drawMenu(ctx) {
   ctx.drawImage(img.plantTop, layout.plantTop.x, layout.plantTop.y);
 
   ctx.drawImage(img.logo, layout.logo.x, layout.logo.y);
-  
+
   ctx.save();
   ctx.translate(layout.startBtn.x, layout.startBtn.y);
   ctx.rotate(-Math.PI / 2);
@@ -85,10 +86,16 @@ function gameLoop() {
     updateAndDrawParticles(ctx);
     updateAndDrawFloatingTexts(ctx);
     updateSilvering();
+
+    if(gameState.isOptions()) {
+      drawOptionsDialog(ctx)
+    }
+
     if (gameState.isGameOver() && gameState.silveringDone) {
       drawGameOverScreen(ctx);
     }
   }
+  
   requestAnimationFrame(gameLoop);
 }
 

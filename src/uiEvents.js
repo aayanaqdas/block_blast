@@ -15,13 +15,36 @@ const createButton = (onClick, config = {}) => ({
 
 const BUTTONS = {
   start: createButton(() => {
-    console.log("Start clicked");
     gameState.startAnim();
   }),
 
   options: createButton(() => {
-    console.log("Options clicked");
+    gameState.showOptions();
   }),
+
+  optionsClose: createButton(() => {
+    gameState.optionsAnimProgress = 0;
+    gameState.startGame();
+  }),
+
+  optionsSound: createButton(() => {
+    gameState.isSoundOn ? (gameState.isSoundOn = false) : (gameState.isSoundOn = true);
+  }),
+
+  optionsReplay: createButton(() => {
+    gameState.reset();
+    createHand();
+  }),
+
+  optionsReset: createButton(() => {
+    if (confirm(`Reset your best score (${gameState.bestScore})?`)) {
+      gameState.bestScore = 0;
+      localStorage.setItem("blockBlastBestScore", gameState.bestScore);
+      gameState.reset();
+      createHand();
+    }
+  }),
+
   newGame: createButton(() => {
     console.log("New game clicked");
     gameState.reset();
@@ -93,6 +116,39 @@ function positionButtons() {
     startBtnSprite.sh,
     startBtnSprite.sw,
   );
+
+  const closeBtnSprite = spriteMap.optionsUI.closeBtn;
+  setButtonPosition(
+    BUTTONS.optionsClose,
+    layout.optionsCloseBtn.x - closeBtnSprite.sh / 2,
+    layout.optionsCloseBtn.y - closeBtnSprite.sw / 2,
+    closeBtnSprite.sh,
+    closeBtnSprite.sw,
+  );
+
+  setButtonPosition(
+    BUTTONS.optionsSound,
+    layout.optionsSoundBtn.x,
+    layout.optionsSoundBtn.y,
+    layout.optionsSoundBtn.w,
+    layout.optionsSoundBtn.h,
+  );
+
+  setButtonPosition(
+    BUTTONS.optionsReplay,
+    layout.optionsReplayBtn.x,
+    layout.optionsReplayBtn.y,
+    layout.optionsReplayBtn.w,
+    layout.optionsReplayBtn.h,
+  );
+
+  setButtonPosition(
+    BUTTONS.optionsReset,
+    layout.optionsResetBtn.x,
+    layout.optionsResetBtn.y,
+    layout.optionsResetBtn.w,
+    layout.optionsResetBtn.h,
+  );
 }
 
 function isPointInRect(clickX, clickY, x, y, width, height) {
@@ -123,6 +179,24 @@ const STATE_CLICK_HANDLERS = {
   PLAYING: (clickX, clickY) => {
     if (isButtonClicked(BUTTONS.options, clickX, clickY)) {
       pressButton(layout.optionsBtn, BUTTONS.options.onClick);
+      return true;
+    }
+    return false;
+  },
+
+  OPTIONS: (clickX, clickY) => {
+    if (gameState.optionsAnimProgress < 1) return false;
+    if (isButtonClicked(BUTTONS.optionsClose, clickX, clickY)) {
+      pressButton(layout.optionsCloseBtn, BUTTONS.optionsClose.onClick);
+      return true;
+    } else if (isButtonClicked(BUTTONS.optionsSound, clickX, clickY)) {
+      pressButton(layout.optionsSoundBtn, BUTTONS.optionsSound.onClick);
+      return true;
+    } else if (isButtonClicked(BUTTONS.optionsReplay, clickX, clickY)) {
+      pressButton(layout.optionsReplayBtn, BUTTONS.optionsReplay.onClick);
+      return true;
+    } else if (isButtonClicked(BUTTONS.optionsReset, clickX, clickY)) {
+      pressButton(layout.optionsResetBtn, BUTTONS.optionsReset.onClick);
       return true;
     }
     return false;
